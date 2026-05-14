@@ -81,7 +81,9 @@ namespace DialogueNodeEditor.Demo
         private void EndDialogue()
         {
             _currentNode = null;
-            dialogueUI.ShowDialogue("System", "End of Demo.", null);
+            
+            // UIを非表示にする
+            dialogueUI.HideDialogue();
         }
     }
 }

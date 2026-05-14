@@ -125,5 +125,10 @@ namespace DialogueNodeEditor.Demo
                 Destroy(child.gameObject);
             }
         }
+        public void HideDialogue()
+        {
+            // DialogueUIがアタッチされているオブジェクト（Canvas等）を非表示にする
+            gameObject.SetActive(false);
+        }
     }
 }

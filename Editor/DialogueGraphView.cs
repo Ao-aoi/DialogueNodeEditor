@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +9,45 @@ namespace DialogueNodeEditor
 {
     public class DialogueGraphView : GraphView
     {
+        public Blackboard Blackboard;
+        public List<ExposedProperty> ExposedProperties = new List<ExposedProperty>();
+
+        public void ClearBlackBoardAndData()
+        {
+            ExposedProperties.Clear();
+            if (Blackboard != null)
+            {
+                Blackboard.Clear();
+                Blackboard.Add(new BlackboardSection { title = "Exposed Properties" });
+            }
+        }
+
+        public void AddPropertyToBlackBoard(ExposedProperty exposedProperty)
+        {
+            var localPropertyName = exposedProperty.PropertyName;
+            var localPropertyValue = exposedProperty.PropertyValue;
+            
+            while (ExposedProperties.Any(x => x.PropertyName == localPropertyName))
+                localPropertyName = $"{localPropertyName}(1)";
+            
+            var property = new ExposedProperty { PropertyName = localPropertyName, PropertyValue = localPropertyValue };
+            ExposedProperties.Add(property);
+
+            var container = new VisualElement();
+            var blackboardField = new BlackboardField { text = property.PropertyName, typeText = "Float" };
+            container.Add(blackboardField);
+
+            var propertyValueTextField = new FloatField("Value") { value = property.PropertyValue };
+            propertyValueTextField.RegisterValueChangedCallback(evt => {
+                var index = ExposedProperties.FindIndex(x => x.PropertyName == property.PropertyName);
+                ExposedProperties[index].PropertyValue = evt.newValue;
+            });
+
+            var blackboardRow = new BlackboardRow(blackboardField, propertyValueTextField);
+            container.Add(blackboardRow);
+            Blackboard.Add(container);
+        }
+
         public DialogueGraphView(DialogueGraphWindow editorWindow)
         {
             SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
@@ -21,11 +61,9 @@ namespace DialogueNodeEditor
             var styleSheet = ScriptableObject.CreateInstance<StyleSheet>();
             styleSheets.Add(styleSheet);
 
-            // グラフ内の変更（線の接続・切断など）を監視するコールバックを登録
             graphViewChanged = OnGraphViewChanged;
         }
 
-        // ノードの接続・切断を検知してUIを更新する
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
             if (graphViewChange.edgesToCreate != null)
@@ -34,7 +72,6 @@ namespace DialogueNodeEditor
                 {
                     if (edge.input.node is DialogueNode dNode && edge.output.node is CharacterNode)
                     {
-                        // 接続直後に処理をスケジュールする
                         dNode.schedule.Execute(() => dNode.UpdateCharacterState()).StartingIn(10);
                     }
                 }
@@ -87,6 +124,7 @@ namespace DialogueNodeEditor
 
             evt.menu.AppendAction("Add Dialogue Node", action => CreateNode(new DialogueNode(), mousePosition));
             evt.menu.AppendAction("Add Character Setting", action => CreateNode(new CharacterNode(), mousePosition));
+            evt.menu.AppendAction("Add Start Node", action => CreateNode(new StartNode(), mousePosition));
             evt.menu.AppendAction("Add End Node", action => CreateNode(new EndNode(), mousePosition));
             evt.menu.AppendAction("Add Setting/Portrait", action => CreateNode(new PortraitNode(), mousePosition));
             evt.menu.AppendAction("Add Setting/Still", action => CreateNode(new StillNode(), mousePosition));

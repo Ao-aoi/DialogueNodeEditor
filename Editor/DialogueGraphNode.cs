@@ -12,7 +12,19 @@ namespace DialogueNodeEditor{
     public class PanelSizePort {}
     public class CharacterPort {}
     public class FloatPort {}
-
+    
+    public class PropertyNode : BaseGraphNode
+    {
+        public string PropertyName;
+        public PropertyNode()
+        {
+            var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(FloatPort));
+            outputPort.portName = "Output";
+            outputContainer.Add(outputPort);
+            RefreshExpandedState(); RefreshPorts();
+        }
+    }
+    
     public class BaseGraphNode : Node
     {
         public string GUID;
@@ -100,7 +112,6 @@ namespace DialogueNodeEditor{
             var graphView = this.GetFirstAncestorOfType<DialogueGraphView>();
             if (graphView != null)
             {
-                // 全てのDialogueNodeに更新を通知してプルダウンのリストを同期する
                 foreach (var node in graphView.nodes.ToList().OfType<DialogueNode>())
                 {
                     node.UpdateCharacterState();
@@ -129,6 +140,9 @@ namespace DialogueNodeEditor{
         public Toggle TypingSpeedToggle;
         public FloatField TypingSpeedField;
         public Port TypingSpeedInputPort;
+
+        public bool CanSkipTyping = true;
+        public Toggle CanSkipTypingToggle;
 
         public DialogueNode()
         {
@@ -160,15 +174,14 @@ namespace DialogueNodeEditor{
 
             var textField = new TextField() { multiline = true };
             textField.style.minHeight = 50f;
-            textField.style.flexGrow = 1; // 縦の余ったスペースをすべて埋める
+            textField.style.flexGrow = 1;
             
-            // TextField内の「実際の入力エリア」を取得して広げる
             var inputElement = textField.Q("unity-text-input");
             if (inputElement != null)
             {
                 inputElement.style.flexGrow = 1;
-                inputElement.style.unityTextAlign = TextAnchor.UpperLeft; // テキストを左上に配置
-                inputElement.style.whiteSpace = WhiteSpace.Normal; // 文字が右端で折り返すように設定
+                inputElement.style.unityTextAlign = TextAnchor.UpperLeft;
+                inputElement.style.whiteSpace = WhiteSpace.Normal;
             }
 
             textField.RegisterValueChangedCallback(evt => DialogueText = evt.newValue);
@@ -207,12 +220,15 @@ namespace DialogueNodeEditor{
             _settingsContainer.style.backgroundColor = new StyleColor(new Color(0.15f, 0.15f, 0.15f, 1f));
             _settingsContainer.style.paddingTop = 5; _settingsContainer.style.paddingBottom = 5;
             _settingsContainer.style.paddingLeft = 5; _settingsContainer.style.paddingRight = 5;
-            _settingsContainer.style.display = DisplayStyle.None; // 初期は非表示
+            _settingsContainer.style.display = DisplayStyle.None;
 
             var title = new Label("Advanced Settings") { style = { unityFontStyleAndWeight = FontStyle.Bold, marginBottom = 5 } };
             _settingsContainer.Add(title);
 
-            // タイプスピード設定の行を作成
+            CanSkipTypingToggle = new Toggle("Can Skip Typing") { value = CanSkipTyping };
+            CanSkipTypingToggle.RegisterValueChangedCallback(evt => CanSkipTyping = evt.newValue);
+            _settingsContainer.Add(CanSkipTypingToggle);
+
             var speedRow = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
             
             TypingSpeedToggle = new Toggle("Type Speed");
@@ -222,18 +238,16 @@ namespace DialogueNodeEditor{
             });
             speedRow.Add(TypingSpeedToggle);
 
-            // 入力ポートを生成（Shader Graphのようにポートの中に直接入力フィールドを埋め込む）
             TypingSpeedInputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(FloatPort));
             TypingSpeedInputPort.portName = ""; 
             TypingSpeedInputPort.style.display = DisplayStyle.None;
 
             TypingSpeedField = new FloatField() { value = 0.05f, style = { width = 40 } };
-            TypingSpeedInputPort.contentContainer.Add(TypingSpeedField); // ポート内にFloatFieldを追加
+            TypingSpeedInputPort.contentContainer.Add(TypingSpeedField);
 
             speedRow.Add(TypingSpeedInputPort);
             _settingsContainer.Add(speedRow);
             
-            // 下部の拡張コンテナに追加
             extensionContainer.Add(_settingsContainer);
         }
 
@@ -243,18 +257,15 @@ namespace DialogueNodeEditor{
             List<CharacterNode> charNodes = new List<CharacterNode>();
             if (graphView != null) charNodes = graphView.nodes.ToList().OfType<CharacterNode>().ToList();
 
-            // プルダウンのリストを更新
             var charNames = new List<string> { "None (Custom)" };
             charNames.AddRange(charNodes.Select(c => c.CharacterName));
             CharacterDropdown.choices = charNames;
 
-            // 存在しない名前が選ばれていたら戻す
             if (!charNames.Contains(CharacterDropdown.value)) CharacterDropdown.SetValueWithoutNotify("None (Custom)");
 
             var edges = CharacterInputPort.connections.ToList();
             if (edges.Count > 0 && edges[0].output.node is CharacterNode connectedCharNode)
             {
-                // ■ 線が繋がれている場合は線を優先
                 CharacterDropdown.style.display = DisplayStyle.None;
                 _speakerNameField.style.display = DisplayStyle.None;
                 SpeakerName = connectedCharNode.CharacterName;
@@ -267,7 +278,6 @@ namespace DialogueNodeEditor{
             }
             else
             {
-                // ■ 線が繋がれていない場合はプルダウンを使う
                 CharacterDropdown.style.display = DisplayStyle.Flex;
                 
                 if (CharacterDropdown.value == "None (Custom)")
@@ -298,7 +308,7 @@ namespace DialogueNodeEditor{
         public void AddChoicePort(string choiceText = "New Choice")
         {
             var generatedPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(FlowPort));
-            generatedPort.portName = choiceText; // 名前をポートに反映
+            generatedPort.portName = choiceText;
             
             var textField = new TextField() { value = choiceText };
             textField.style.minWidth = 100;
@@ -314,7 +324,6 @@ namespace DialogueNodeEditor{
         {
             base.BuildContextualMenu(evt);
             evt.menu.AppendSeparator();
-            // 詳細設定の表示/非表示を切り替えるメニュー
             evt.menu.AppendAction(ShowSettings ? "Hide Advanced Settings" : "Show Advanced Settings", a => ToggleSettings());
         }
 
@@ -332,7 +341,6 @@ namespace DialogueNodeEditor{
 
         private void RemoveChoicePort(Port port)
         {
-            // ▼追加: ポートに接続されているEdge(線)があれば削除する
             if (port.connections.Any())
             {
                 var graphView = port.GetFirstAncestorOfType<DialogueGraphView>();
@@ -342,12 +350,9 @@ namespace DialogueNodeEditor{
                     graphView.DeleteElements(edgesToDelete);
                 }
             }
-
             outputContainer.Remove(port);
             RefreshExpandedState(); RefreshPorts();
         }
-
-        
     }
 
     public class PortraitNode : BaseGraphNode
@@ -424,6 +429,22 @@ namespace DialogueNodeEditor{
             var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(FlowPort));
             inputPort.portName = "Input";
             inputContainer.Add(inputPort);
+
+            RefreshExpandedState();
+            RefreshPorts();
+        }
+    }
+
+    public class StartNode : BaseGraphNode
+    {
+        public StartNode()
+        {
+            title = "Start";
+            style.width = 100;
+
+            var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(FlowPort));
+            outputPort.portName = "Start";
+            outputContainer.Add(outputPort);
 
             RefreshExpandedState();
             RefreshPorts();

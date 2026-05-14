@@ -34,6 +34,8 @@ namespace DialogueNodeEditor
                 dialogueContainer.CharacterNodeData.Clear(); dialogueContainer.PortraitNodeData.Clear();
                 dialogueContainer.StillNodeData.Clear(); dialogueContainer.PanelSizeNodeData.Clear();
                 dialogueContainer.EndNodeData.Clear();
+                dialogueContainer.PropertyNodeData.Clear();
+                dialogueContainer.ExposedProperties.Clear();
             }
 
             var connectedPorts = Edges.Where(x => x.input.node != null).ToArray();
@@ -86,10 +88,11 @@ namespace DialogueNodeEditor
                         Choices = choices,
                         PortraitNodeGUID = portraitGuid,
                         StillNodeGUID = stillGuid,
-                        ShowSettings = dialogueNode.ShowSettings,               // 追加
-                        OverrideTypingSpeed = dialogueNode.OverrideTypingSpeed, // 追加
-                        TypingSpeedValue = dialogueNode.TypingSpeedField.value, // 追加
-                        TypingSpeedNodeGUID = floatGuid      
+                        ShowSettings = dialogueNode.ShowSettings,
+                        OverrideTypingSpeed = dialogueNode.OverrideTypingSpeed,
+                        TypingSpeedValue = dialogueNode.TypingSpeedField.value,
+                        TypingSpeedNodeGUID = floatGuid,
+                        CanSkipTyping = dialogueNode.CanSkipTyping
                     });
                 }
                 else if (baseNode is CharacterNode characterNode)
@@ -116,7 +119,24 @@ namespace DialogueNodeEditor
                 {
                     dialogueContainer.EndNodeData.Add(new EndNodeData { NodeGUID = endNode.GUID, Position = endNode.GetPosition().position });
                 }
+                else if (baseNode is StartNode startNode)
+                {
+                    dialogueContainer.StartNodeData.Add(new StartNodeData { 
+                        NodeGUID = startNode.GUID, 
+                        Position = startNode.GetPosition().position 
+                    });
+                }
+                else if (baseNode is PropertyNode propertyNode)
+                {
+                    dialogueContainer.PropertyNodeData.Add(new PropertyNodeData {
+                        NodeGUID = propertyNode.GUID,
+                        PropertyName = propertyNode.PropertyName,
+                        Position = propertyNode.GetPosition().position
+                    });
+                }
             }
+
+            dialogueContainer.ExposedProperties.AddRange(_targetGraphView.ExposedProperties);
 
             if (isNew) AssetDatabase.CreateAsset(dialogueContainer, assetPath);
             else EditorUtility.SetDirty(dialogueContainer);
@@ -126,15 +146,21 @@ namespace DialogueNodeEditor
         public void LoadGraph(DialogueContainer container)
         {
             if (container == null) return;
-            ClearGraph(); CreateNodes(container); ConnectNodes(container);
+            ClearGraph(); 
 
-            // 接続後に表情(Expression)とプルダウンの状態を復元
+            _targetGraphView.ClearBlackBoardAndData();
+            foreach (var prop in container.ExposedProperties)
+            {
+                _targetGraphView.AddPropertyToBlackBoard(prop);
+            }
+
+            CreateNodes(container); ConnectNodes(container);
+
             foreach (var node in Nodes.OfType<DialogueNode>())
             {
                 var data = container.DialogueNodeData.FirstOrDefault(x => x.NodeGUID == node.GUID);
                 if (data != null)
                 {
-                    // ▼ 接続線がなく、CharacterNodeが存在する名前ならプルダウンを復元する
                     var charNodes = Nodes.OfType<CharacterNode>().ToList();
                     if (charNodes.Any(c => c.CharacterName == data.SpeakerName))
                     {
@@ -147,17 +173,21 @@ namespace DialogueNodeEditor
 
                     node.UpdateCharacterState();
 
-                    // 表情の復元
                     if (!string.IsNullOrEmpty(data.Expression))
                     {
                         node.Expression = data.Expression;
-                        var dropdown = node.mainContainer.Query<DropdownField>().Where(d => d.label == "Expression").First();
-                        if (dropdown != null) dropdown.SetValueWithoutNotify(data.Expression);                    }
+                        // ★修正: ToList()を追加して、LINQのエラーが出ないようにしました
+                        var dropdown = node.mainContainer.Query<DropdownField>().ToList().FirstOrDefault(d => d.label == "Expression");
+                        if (dropdown != null) dropdown.SetValueWithoutNotify(data.Expression);                    
+                    }
 
                     node.ShowSettings = data.ShowSettings;
                     node.OverrideTypingSpeed = data.OverrideTypingSpeed;
                     node.TypingSpeedToggle.SetValueWithoutNotify(data.OverrideTypingSpeed);
                     node.TypingSpeedField.SetValueWithoutNotify(data.TypingSpeedValue);
+                    
+                    node.CanSkipTyping = data.CanSkipTyping;
+                    node.CanSkipTypingToggle.SetValueWithoutNotify(data.CanSkipTyping);
                     
                     node.TypingSpeedInputPort.style.display = data.OverrideTypingSpeed ? DisplayStyle.Flex : DisplayStyle.None;
                     node.UpdateSettingsUI();
@@ -215,6 +245,20 @@ namespace DialogueNodeEditor
             {
                 var tempNode = new EndNode(); tempNode.SetPosition(new Rect(data.Position, new Vector2(150, 100)));
                 tempNode.GUID = data.NodeGUID; _targetGraphView.AddElement(tempNode);
+            }
+            foreach (var data in container.StartNodeData)
+            {
+                var tempNode = new StartNode();
+                tempNode.SetPosition(new Rect(data.Position, new Vector2(100, 100)));
+                tempNode.GUID = data.NodeGUID;
+                _targetGraphView.AddElement(tempNode);
+            }
+            foreach (var pData in container.PropertyNodeData)
+            {
+                var tempNode = new PropertyNode { PropertyName = pData.PropertyName, title = pData.PropertyName };
+                tempNode.SetPosition(new Rect(pData.Position, new Vector2(150, 100)));
+                tempNode.GUID = pData.NodeGUID;
+                _targetGraphView.AddElement(tempNode);
             }
         }
 

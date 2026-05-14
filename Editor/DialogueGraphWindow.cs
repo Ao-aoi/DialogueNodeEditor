@@ -1,15 +1,16 @@
 using UnityEditor;
-using UnityEditor.Callbacks; // 追加：OnOpenAsset用
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
+using System.Linq;
 
 namespace DialogueNodeEditor
 {
     public class DialogueGraphWindow : EditorWindow
     {
         private DialogueGraphView _graphView;
-        private string _currentAssetPath = ""; // 現在開いているファイルのパス
+        private string _currentAssetPath = "";
         private Label _pathLabel;
 
         [MenuItem("Window/Dialogue Node Editor")]
@@ -19,7 +20,6 @@ namespace DialogueNodeEditor
             window.titleContent = new GUIContent("Dialogue Editor");
         }
 
-        // ① プロジェクトウィンドウでダブルクリックされたときの処理
         [OnOpenAsset(1)]
         public static bool OnOpenAsset(int instanceID, int line)
         {
@@ -38,8 +38,6 @@ namespace DialogueNodeEditor
         {
             ConstructGraphView();
             GenerateToolbar();
-
-            // ③ Ctrl+S (Macは Cmd+S) で保存するイベントの登録
             rootVisualElement.RegisterCallback<KeyDownEvent>(OnKeyDown);
         }
 
@@ -50,11 +48,10 @@ namespace DialogueNodeEditor
 
         private void OnKeyDown(KeyDownEvent evt)
         {
-            // Ctrl (または Command) + S を検知
             if (evt.actionKey && evt.keyCode == KeyCode.S)
             {
                 SaveData();
-                evt.StopPropagation(); // イベントのバブルアップを止める
+                evt.StopPropagation();
             }
             else if (evt.keyCode == KeyCode.Space)
             {
@@ -69,7 +66,6 @@ namespace DialogueNodeEditor
         {
             var toolbar = new UnityEditor.UIElements.Toolbar();
 
-            // 現在のファイルパスを表示するラベル
             _pathLabel = new Label("Unsaved Graph");
             _pathLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
             _pathLabel.style.width = 250;
@@ -83,7 +79,6 @@ namespace DialogueNodeEditor
             rootVisualElement.Add(toolbar);
         }
 
-        // ④ エクスプローラーを開いて保存
         private void SaveDataAs()
         {
             string path = EditorUtility.SaveFilePanelInProject("Save Dialogue Graph", "New Narrative", "asset", "Please enter a file name to save the dialogue graph to.");
@@ -96,7 +91,6 @@ namespace DialogueNodeEditor
             saveUtility.SaveGraph(_currentAssetPath);
         }
 
-        // 上書き保存（パスがなければSaveAsを実行）
         private void SaveData()
         {
             if (string.IsNullOrEmpty(_currentAssetPath))
@@ -110,13 +104,11 @@ namespace DialogueNodeEditor
             }
         }
 
-        // ロード画面（ダイアログ）を開く
         private void LoadDataDialog()
         {
             string path = EditorUtility.OpenFilePanel("Load Dialogue Graph", "Assets", "asset");
             if (string.IsNullOrEmpty(path)) return;
 
-            // Application.dataPathを基準にAssetsからの相対パスに変換
             if (path.StartsWith(Application.dataPath))
             {
                 path = "Assets" + path.Substring(Application.dataPath.Length);
@@ -133,10 +125,9 @@ namespace DialogueNodeEditor
             }
         }
 
-        // コンテナからロードする処理
         public void LoadGraphFromAsset(DialogueContainer container)
         {
-            if (_graphView == null) return; // ウィンドウが開いていない場合のフェイルセーフ
+            if (_graphView == null) return;
 
             _currentAssetPath = AssetDatabase.GetAssetPath(container);
             UpdatePathLabel();
@@ -159,6 +150,8 @@ namespace DialogueNodeEditor
             _graphView.StretchToParentSize();
             rootVisualElement.Add(_graphView);
 
+            GenerateBlackboard();
+
             var searchWindow = ScriptableObject.CreateInstance<DialogueSearchWindow>();
             searchWindow.Init(this, _graphView);
             _graphView.nodeCreationRequest = context => 
@@ -170,6 +163,38 @@ namespace DialogueNodeEditor
                     _graphView.CreateNode(new EndNode(), new Vector2(600, 200));
                 }
             }).StartingIn(50);
+        }
+        
+        private void GenerateBlackboard()
+        {
+            var blackboard = new UnityEditor.Experimental.GraphView.Blackboard(_graphView);
+            blackboard.Add(new BlackboardSection { title = "Exposed Properties" });
+            blackboard.addItemRequested = _blackboard => {
+                _graphView.AddPropertyToBlackBoard(new ExposedProperty());
+            };
+            
+            blackboard.editTextRequested = (blackboard1, element, newValue) => {
+                var oldPropertyName = ((BlackboardField)element).text;
+                if (_graphView.ExposedProperties.Any(x => x.PropertyName == newValue))
+                {
+                    EditorUtility.DisplayDialog("Error", "This property name already exists.", "OK");
+                    return;
+                }
+                var propertyIndex = _graphView.ExposedProperties.FindIndex(x => x.PropertyName == oldPropertyName);
+                _graphView.ExposedProperties[propertyIndex].PropertyName = newValue;
+                ((BlackboardField)element).text = newValue;
+
+                var propNodes = _graphView.nodes.ToList().OfType<PropertyNode>().Where(x => x.PropertyName == oldPropertyName);
+                foreach (var propNode in propNodes)
+                {
+                    propNode.PropertyName = newValue;
+                    propNode.title = newValue;
+                }
+            };
+
+            blackboard.SetPosition(new Rect(10, 30, 200, 300));
+            _graphView.Add(blackboard);
+            _graphView.Blackboard = blackboard;
         }
     }
 }

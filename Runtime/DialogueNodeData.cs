@@ -10,7 +10,16 @@ namespace DialogueNodeEditor
         public string NodeGUID;
         public string SpeakerName;
         public string DialogueText;
+        public string Expression; // 追加: 選択された表情名
         public Vector2 Position;
+        public List<string> Choices = new List<string>(); // 追加: 選択肢ポート名リスト
+    }
+
+    [Serializable]
+    public class ExpressionData
+    {
+        public string Name;
+        public Sprite Sprite;
     }
 
     [Serializable]
@@ -18,7 +27,7 @@ namespace DialogueNodeEditor
     {
         public string NodeGUID;
         public string CharacterName;
-        public List<string> ExpressionList;
+        public List<ExpressionData> Expressions = new List<ExpressionData>(); // 変更: Spriteも保存する
         public Vector2 Position;
     }
 

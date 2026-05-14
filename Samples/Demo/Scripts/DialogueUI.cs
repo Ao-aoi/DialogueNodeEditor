@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Button用
+using UnityEngine.UI;
 using TMPro;
 
 namespace DialogueNodeEditor.Demo
@@ -12,28 +12,75 @@ namespace DialogueNodeEditor.Demo
         [Header("UI References")]
         public TextMeshProUGUI speakerNameText;
         public TextMeshProUGUI dialogueText;
-        
+        public Image portraitImage; // Canvas上で作成したImage(UI)を割り当ててください
+
         [Header("Choice Settings")]
-        public Transform choiceContainer; // ボタンを並べる親要素
-        public GameObject choiceButtonPrefab; // ボタンのプレハブ
+        public Transform choiceContainer;
+        public GameObject choiceButtonPrefab;
 
         [Header("Typing Settings")]
         public float typingSpeed = 0.05f;
 
+        [Header("Animation Settings")]
+        public float slideInDuration = 0.3f;
+        public Vector2 portraitHiddenPosition = new Vector2(-500, 0); // 画面外（左側など）
+        public Vector2 portraitVisiblePosition = new Vector2(0, 0);   // 通常の表示位置
+
         private Coroutine _typingCoroutine;
+        private Coroutine _slideCoroutine;
         private string _currentFullText = "";
+        private string _lastSpeaker = "";
+
         public bool IsTyping { get; private set; }
 
-        public void ShowDialogue(string speakerName, string text)
+        public void ShowDialogue(string speakerName, string text, Sprite portraitSprite)
         {
-            // 新しいセリフを表示する前に古いボタンを消す
             ClearChoices();
             
             speakerNameText.text = speakerName;
             _currentFullText = text;
             
+            // ポートレート（立ち絵）の表示制御とアニメーション
+            if (portraitSprite != null)
+            {
+                portraitImage.gameObject.SetActive(true);
+                portraitImage.sprite = portraitSprite;
+
+                // 違うキャラクターに変わった場合のみスライドインさせる
+                if (_lastSpeaker != speakerName)
+                {
+                    if (_slideCoroutine != null) StopCoroutine(_slideCoroutine);
+                    _slideCoroutine = StartCoroutine(SlideInPortrait());
+                }
+            }
+            else
+            {
+                portraitImage.gameObject.SetActive(false);
+            }
+            
+            _lastSpeaker = speakerName;
+
             if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
             _typingCoroutine = StartCoroutine(TypeTextRoutine(text));
+        }
+
+        private IEnumerator SlideInPortrait()
+        {
+            RectTransform rect = portraitImage.rectTransform;
+            rect.anchoredPosition = portraitHiddenPosition;
+
+            float elapsedTime = 0f;
+            while (elapsedTime < slideInDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / slideInDuration);
+                
+                // 少し減速しながらスライドさせる (EaseOut)
+                t = 1f - Mathf.Pow(1f - t, 3f); 
+                rect.anchoredPosition = Vector2.Lerp(portraitHiddenPosition, portraitVisiblePosition, t);
+                yield return null;
+            }
+            rect.anchoredPosition = portraitVisiblePosition;
         }
 
         private IEnumerator TypeTextRoutine(string text)
@@ -58,18 +105,15 @@ namespace DialogueNodeEditor.Demo
             }
         }
 
-        // 選択肢ボタンを生成する
         public void SetChoices(List<NodeLinkData> links, Action<NodeLinkData> onChoiceSelected)
         {
             ClearChoices();
             foreach (var link in links)
             {
                 var buttonObj = Instantiate(choiceButtonPrefab, choiceContainer);
-                // ボタンのテキストを設定（PortNameを選択肢のラベルとして使用）
                 var btnText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
                 if (btnText != null) btnText.text = link.PortName;
 
-                // クリック時のイベント登録
                 buttonObj.GetComponent<Button>().onClick.AddListener(() => onChoiceSelected(link));
             }
         }

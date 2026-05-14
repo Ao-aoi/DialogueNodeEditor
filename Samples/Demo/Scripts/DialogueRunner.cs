@@ -15,7 +15,6 @@ namespace DialogueNodeEditor.Demo
         private void Start()
         {
             if (dialogueData == null || dialogueData.DialogueNodeData.Count == 0) return;
-            
             _currentNode = dialogueData.DialogueNodeData[0];
             PlayNode(_currentNode);
         }
@@ -26,44 +25,44 @@ namespace DialogueNodeEditor.Demo
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (dialogueUI.IsTyping)
-                {
-                    dialogueUI.SkipTyping();
-                }
-                else
-                {
-                    CheckNextStep();
-                }
+                if (dialogueUI.IsTyping) dialogueUI.SkipTyping();
+                else CheckNextStep();
             }
         }
 
         private void PlayNode(DialogueNodeData node)
         {
             _waitingForChoice = false;
-            dialogueUI.ShowDialogue(node.SpeakerName, node.DialogueText);
+
+            // 立ち絵（Sprite）の検索
+            Sprite characterSprite = null;
+            if (!string.IsNullOrEmpty(node.SpeakerName))
+            {
+                var charData = dialogueData.CharacterNodeData.FirstOrDefault(c => c.CharacterName == node.SpeakerName);
+                if (charData != null)
+                {
+                    var exprData = charData.Expressions.FirstOrDefault(e => e.Name == node.Expression);
+                    if (exprData != null) characterSprite = exprData.Sprite;
+                }
+            }
+
+            dialogueUI.ShowDialogue(node.SpeakerName, node.DialogueText, characterSprite);
         }
 
         private void CheckNextStep()
         {
-            // 現在のノードからの全リンクを取得
             var links = dialogueData.NodeLinks.Where(x => x.BaseNodeGuid == _currentNode.NodeGUID).ToList();
 
             if (links.Count > 1)
             {
-                // 選択肢が複数ある場合：ボタンを表示して入力を待つ
                 _waitingForChoice = true;
                 dialogueUI.SetChoices(links, OnChoiceSelected);
             }
             else if (links.Count == 1)
             {
-                // リンクが1つだけの場合：そのまま次へ（クリック進行）
                 TransitionTo(links[0].TargetNodeGuid);
             }
-            else
-            {
-                // リンクがない場合：終了
-                EndDialogue();
-            }
+            else EndDialogue();
         }
 
         private void OnChoiceSelected(NodeLinkData selectedLink)
@@ -75,20 +74,14 @@ namespace DialogueNodeEditor.Demo
         private void TransitionTo(string targetGuid)
         {
             _currentNode = dialogueData.DialogueNodeData.FirstOrDefault(x => x.NodeGUID == targetGuid);
-            if (_currentNode != null)
-            {
-                PlayNode(_currentNode);
-            }
-            else
-            {
-                EndDialogue();
-            }
+            if (_currentNode != null) PlayNode(_currentNode);
+            else EndDialogue();
         }
 
         private void EndDialogue()
         {
             _currentNode = null;
-            dialogueUI.ShowDialogue("System", "End of Demo.");
+            dialogueUI.ShowDialogue("System", "End of Demo.", null);
         }
     }
 }

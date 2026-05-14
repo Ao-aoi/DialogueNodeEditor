@@ -96,4 +96,16 @@ namespace DialogueNodeEditor
         public string NodeGUID;
         public Vector2 Position;
     }
+
+    // ★追加: コピー＆ペースト用のデータ構造
+    [Serializable]
+    public class CopyPasteData
+    {
+        public List<DialogueNodeData> DialogueNodes = new List<DialogueNodeData>();
+        public List<CharacterNodeData> CharacterNodes = new List<CharacterNodeData>();
+        public List<PortraitNodeData> PortraitNodes = new List<PortraitNodeData>();
+        public List<StillNodeData> StillNodes = new List<StillNodeData>();
+        public List<PanelSizeNodeData> PanelSizeNodes = new List<PanelSizeNodeData>();
+        public List<PropertyNodeData> PropertyNodes = new List<PropertyNodeData>();
+    }
 }

@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Linq;
 
 namespace DialogueNodeEditor
 {
@@ -10,11 +11,13 @@ namespace DialogueNodeEditor
     {
         private DialogueGraphView _graphView;
         private EditorWindow _window;
+        private Port _sourcePort; // ★追加: ドラッグ元のポートを保持
 
-        public void Init(EditorWindow window, DialogueGraphView graphView)
+        public void Init(EditorWindow window, DialogueGraphView graphView, Port sourcePort)
         {
             _window = window;
             _graphView = graphView;
+            _sourcePort = sourcePort; // ★追加
         }
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
@@ -59,6 +62,34 @@ namespace DialogueNodeEditor
             if (SearchTreeEntry.userData is BaseGraphNode node)
             {
                 _graphView.CreateNode(node, graphMousePosition);
+
+                // ★追加: 引っ張ってきた線があれば自動で繋ぐ
+                if (_sourcePort != null)
+                {
+                    Port targetPort = null;
+                    if (_sourcePort.direction == Direction.Output)
+                    {
+                        // 引っ張ってきたポートがOutputなら、新しいノードのInputを探す
+                        targetPort = node.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == _sourcePort.portType);
+                    }
+                    else
+                    {
+                        // 引っ張ってきたポートがInputなら、新しいノードのOutputを探す
+                        targetPort = node.outputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == _sourcePort.portType);
+                    }
+
+                    if (targetPort != null)
+                    {
+                        var newEdge = new Edge { 
+                            output = _sourcePort.direction == Direction.Output ? _sourcePort : targetPort, 
+                            input = _sourcePort.direction == Direction.Input ? _sourcePort : targetPort 
+                        };
+                        newEdge.input.Connect(newEdge);
+                        newEdge.output.Connect(newEdge);
+                        _graphView.AddElement(newEdge);
+                    }
+                }
+
                 return true;
             }
             return false;

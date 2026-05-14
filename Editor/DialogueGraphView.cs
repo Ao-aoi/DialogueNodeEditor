@@ -62,6 +62,117 @@ namespace DialogueNodeEditor
             styleSheets.Add(styleSheet);
 
             graphViewChanged = OnGraphViewChanged;
+
+            // ★修正: デリゲート名の誤り(canPaste)を canPasteSerializedData に修正
+            serializeGraphElements = OnSerializeGraphElements;
+            canPasteSerializedData = OnCanPaste; 
+            unserializeAndPaste = OnUnserializeAndPaste;
+        }
+
+        // 複製 (Ctrl+D) 機能
+        public void DuplicateNodes()
+        {
+            // ★修正: selection を GraphElement にキャスト(OfType)してから渡す
+            var data = OnSerializeGraphElements(selection.OfType<GraphElement>());
+            if (!string.IsNullOrEmpty(data))
+            {
+                OnUnserializeAndPaste("Duplicate", data);
+            }
+        }
+
+        // コピー用データのシリアライズ
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements)
+        {
+            var copyData = new CopyPasteData();
+            foreach (var element in elements)
+            {
+                if (element is DialogueNode dNode)
+                {
+                    var choices = dNode.outputContainer.Children().OfType<Port>().Skip(1).Select(p => p.portName).ToList();
+                    copyData.DialogueNodes.Add(new DialogueNodeData {
+                        SpeakerName = dNode.SpeakerName, DialogueText = dNode.DialogueText, Expression = dNode.Expression,
+                        Position = dNode.GetPosition().position, Choices = choices, ShowSettings = dNode.ShowSettings,
+                        OverrideTypingSpeed = dNode.OverrideTypingSpeed, TypingSpeedValue = dNode.TypingSpeedValue, CanSkipTyping = dNode.CanSkipTyping
+                    });
+                }
+                else if (element is CharacterNode cNode)
+                {
+                    copyData.CharacterNodes.Add(new CharacterNodeData {
+                        CharacterName = cNode.CharacterName, Position = cNode.GetPosition().position,
+                        Expressions = cNode.Expressions.Select(e => new ExpressionData { Name = e.Name, Sprite = e.Sprite }).ToList()
+                    });
+                }
+                else if (element is PortraitNode pNode)
+                {
+                    copyData.PortraitNodes.Add(new PortraitNodeData { PortraitImage = pNode.PortraitImage, Position = pNode.GetPosition().position });
+                }
+                else if (element is StillNode sNode)
+                {
+                    copyData.StillNodes.Add(new StillNodeData { StillImage = sNode.StillImage, ShouldScrollStill = sNode.ShouldScrollStill, ScrollAmount = sNode.ScrollAmount, ScrollSpeed = sNode.ScrollSpeed, Position = sNode.GetPosition().position });
+                }
+                else if (element is PanelSizeNode psNode)
+                {
+                    copyData.PanelSizeNodes.Add(new PanelSizeNodeData { PanelWidth = psNode.PanelWidth, Position = psNode.GetPosition().position });
+                }
+                else if (element is PropertyNode propNode)
+                {
+                    copyData.PropertyNodes.Add(new PropertyNodeData { PropertyName = propNode.PropertyName, Position = propNode.GetPosition().position });
+                }
+            }
+            return JsonUtility.ToJson(copyData);
+        }
+
+        // ペースト可能かどうかの判定
+        private bool OnCanPaste(string data)
+        {
+            return true;
+        }
+
+        // ペーストしてノードを生成
+        private void OnUnserializeAndPaste(string operationName, string data)
+        {
+            var copyData = JsonUtility.FromJson<CopyPasteData>(data);
+            if (copyData == null) return;
+
+            ClearSelection();
+            Vector2 offset = new Vector2(50, 50); // ペースト時に少しずらす
+
+            foreach(var d in copyData.DialogueNodes)
+            {
+                var node = CreateDialogueNode(d.SpeakerName, d.DialogueText, d.Position + offset);
+                node.Expression = d.Expression;
+                node.ShowSettings = d.ShowSettings; node.OverrideTypingSpeed = d.OverrideTypingSpeed;
+                node.TypingSpeedValue = d.TypingSpeedValue; node.CanSkipTyping = d.CanSkipTyping;
+                if(d.Choices != null) foreach(var c in d.Choices) node.AddChoicePort(c);
+                node.UpdateSettingsUI();
+                node.GUID = System.Guid.NewGuid().ToString();
+                AddElement(node); AddToSelection(node);
+            }
+            foreach(var c in copyData.CharacterNodes)
+            {
+                var node = new CharacterNode(); node.SetPosition(new Rect(c.Position + offset, new Vector2(300, 150)));
+                node.LoadData(c.CharacterName, c.Expressions); node.GUID = System.Guid.NewGuid().ToString(); AddElement(node); AddToSelection(node);
+            }
+            foreach(var p in copyData.PortraitNodes)
+            {
+                var node = new PortraitNode(); node.SetPosition(new Rect(p.Position + offset, new Vector2(200, 150))); 
+                node.LoadData(p.PortraitImage); node.GUID = System.Guid.NewGuid().ToString(); AddElement(node); AddToSelection(node);
+            }
+            foreach(var s in copyData.StillNodes)
+            {
+                var node = new StillNode(); node.SetPosition(new Rect(s.Position + offset, new Vector2(200, 150))); 
+                node.LoadData(s.StillImage, s.ShouldScrollStill, s.ScrollAmount, s.ScrollSpeed); node.GUID = System.Guid.NewGuid().ToString(); AddElement(node); AddToSelection(node);
+            }
+            foreach(var ps in copyData.PanelSizeNodes)
+            {
+                var node = new PanelSizeNode(); node.SetPosition(new Rect(ps.Position + offset, new Vector2(200, 150))); 
+                node.LoadData(ps.PanelWidth); node.GUID = System.Guid.NewGuid().ToString(); AddElement(node); AddToSelection(node);
+            }
+            foreach(var prop in copyData.PropertyNodes)
+            {
+                var node = new PropertyNode { PropertyName = prop.PropertyName, title = prop.PropertyName }; 
+                node.SetPosition(new Rect(prop.Position + offset, new Vector2(150, 100))); node.GUID = System.Guid.NewGuid().ToString(); AddElement(node); AddToSelection(node);
+            }
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
@@ -148,7 +259,6 @@ namespace DialogueNodeEditor
             return node;
         }
 
-        // ★追加: 自動整列機能（Auto Layout）
         public void AutoLayoutNodes()
         {
             var allNodes = nodes.ToList().OfType<BaseGraphNode>().ToList();
@@ -161,7 +271,6 @@ namespace DialogueNodeEditor
                 return;
             }
 
-            // 1. Calculate depths for Flow nodes
             var flowDepthMap = new Dictionary<BaseGraphNode, int>();
             var queue = new Queue<BaseGraphNode>();
 
@@ -191,7 +300,6 @@ namespace DialogueNodeEditor
                 }
             }
 
-            // 2. Arrange flow nodes
             float startX = 0;
             float startY = 0;
             float xStep = 450f;
@@ -211,7 +319,6 @@ namespace DialogueNodeEditor
                     node.SetPosition(new Rect(new Vector2(startX + depth * xStep, currentY), Vector2.zero));
                     arrangedNodes.Add(node);
                     
-                    // Arrange connected input nodes (Settings)
                     float settingY = currentY + 150f;
                     int settingCount = 0;
 
@@ -230,7 +337,6 @@ namespace DialogueNodeEditor
                         }
                     }
                     
-                    // Typing Speed の隠しポートも考慮
                     if (node is DialogueNode dNode && dNode.TypingSpeedInputPort != null)
                     {
                         foreach (var edge in dNode.TypingSpeedInputPort.connections)
@@ -249,7 +355,6 @@ namespace DialogueNodeEditor
                 }
             }
 
-            // 3. Arrange unlinked nodes
             var unlinkedNodes = allNodes.Where(n => !arrangedNodes.Contains(n)).ToList();
             float unlinkedX = startX;
             float unlinkedY = startY - 250f;

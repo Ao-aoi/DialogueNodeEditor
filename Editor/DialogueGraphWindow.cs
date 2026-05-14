@@ -53,10 +53,16 @@ namespace DialogueNodeEditor
                 SaveData();
                 evt.StopPropagation();
             }
+            // ★追加: Ctrl+D で複製
+            else if (evt.actionKey && evt.keyCode == KeyCode.D)
+            {
+                _graphView.DuplicateNodes();
+                evt.StopPropagation();
+            }
             else if (evt.keyCode == KeyCode.Space)
             {
                 var searchWindow = ScriptableObject.CreateInstance<DialogueSearchWindow>();
-                searchWindow.Init(this, _graphView);
+                searchWindow.Init(this, _graphView, null);
                 SearchWindow.Open(new SearchWindowContext(evt.originalMousePosition), searchWindow);
                 evt.StopPropagation();
             }
@@ -76,7 +82,6 @@ namespace DialogueNodeEditor
             toolbar.Add(new Button(() => LoadDataDialog()) { text = "Load" });
             toolbar.Add(new Button(() => { _graphView.CreateNode(new DialogueNode(), Vector2.zero); }) { text = "Add Node" });
 
-            // ★追加: 自動整列（Auto Layout）ボタン
             toolbar.Add(new Button(() => _graphView.AutoLayoutNodes()) { text = "Auto Layout" });
 
             rootVisualElement.Add(toolbar);
@@ -155,10 +160,17 @@ namespace DialogueNodeEditor
 
             GenerateBlackboard();
 
-            var searchWindow = ScriptableObject.CreateInstance<DialogueSearchWindow>();
-            searchWindow.Init(this, _graphView);
+            // ★変更: 線をドロップした際にどのポートから引っ張ったかを取得して検索メニューに渡す
             _graphView.nodeCreationRequest = context => 
+            {
+                var searchWindow = ScriptableObject.CreateInstance<DialogueSearchWindow>();
+                Port sourcePort = null;
+                if (context.target is Edge edge) sourcePort = edge.output ?? edge.input;
+                else if (context.target is Port port) sourcePort = port;
+
+                searchWindow.Init(this, _graphView, sourcePort);
                 SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindow);
+            };
         
             _graphView.schedule.Execute(() => {
                 if (_graphView.nodes.ToList().Count == 0)

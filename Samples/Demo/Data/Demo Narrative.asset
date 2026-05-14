@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d21f8b32fd5f642ba8ae73e92fe043, type: 3}
+  m_Name: Demo Narrative
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
+    PortName: Character Output
+    TargetNodeGuid: f3f0fb2f-6e97-4891-a2dc-c75b510fe70e
+  - BaseNodeGuid: f3f0fb2f-6e97-4891-a2dc-c75b510fe70e
+    PortName: Next
+    TargetNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
+  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
+    PortName: Character Output
+    TargetNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
+  - BaseNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
+    PortName: 
+    TargetNodeGuid: 023561a9-5064-4718-880b-597f47ebf454
+  - BaseNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
+    PortName: 
+    TargetNodeGuid: 893e2d09-ba45-4a39-b12f-dd8570191537
+  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
+    PortName: Character Output
+    TargetNodeGuid: 023561a9-5064-4718-880b-597f47ebf454
+  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
+    PortName: Character Output
+    TargetNodeGuid: 893e2d09-ba45-4a39-b12f-dd8570191537
+  DialogueNodeData:
+  - NodeGUID: f3f0fb2f-6e97-4891-a2dc-c75b510fe70e
+    SpeakerName: Sample
+    DialogueText: Hi! This is Demo.
+    Position: {x: 112, y: 10.666668}
+  - NodeGUID: 7a38a758-8d48-4e8f-bf7b-e694769daea7
+    SpeakerName: Sample
+    DialogueText: Please select 'Yes'.
+    Position: {x: 401.33334, y: 8}
+  - NodeGUID: 893e2d09-ba45-4a39-b12f-dd8570191537
+    SpeakerName: Sample
+    DialogueText: I told you to pick 'Yes'...
+    Position: {x: 753.3333, y: 150}
+  - NodeGUID: 023561a9-5064-4718-880b-597f47ebf454
+    SpeakerName: Sample
+    DialogueText: Exactly!
+    Position: {x: 747.3333, y: -37.333332}

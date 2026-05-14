@@ -27,6 +27,7 @@ namespace DialogueNodeEditor
                 new SearchTreeGroupEntry(new GUIContent("Nodes"), 1),
                 new SearchTreeEntry(new GUIContent("Dialogue Node")) { userData = new DialogueNode(), level = 2 },
                 new SearchTreeEntry(new GUIContent("Character Setting")) { userData = new CharacterNode(), level = 2 },
+                new SearchTreeEntry(new GUIContent("End Node")) { userData = new EndNode(), level = 2 },
                 
                 new SearchTreeGroupEntry(new GUIContent("Settings"), 1),
                 new SearchTreeEntry(new GUIContent("Portrait Setting")) { userData = new PortraitNode(), level = 2 },

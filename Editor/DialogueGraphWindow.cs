@@ -56,6 +56,13 @@ namespace DialogueNodeEditor
                 SaveData();
                 evt.StopPropagation(); // イベントのバブルアップを止める
             }
+            else if (evt.keyCode == KeyCode.Space)
+            {
+                var searchWindow = ScriptableObject.CreateInstance<DialogueSearchWindow>();
+                searchWindow.Init(this, _graphView);
+                SearchWindow.Open(new SearchWindowContext(evt.originalMousePosition), searchWindow);
+                evt.StopPropagation();
+            }
         }
 
         private void GenerateToolbar()
@@ -156,6 +163,13 @@ namespace DialogueNodeEditor
             searchWindow.Init(this, _graphView);
             _graphView.nodeCreationRequest = context => 
                 SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindow);
+        
+            _graphView.schedule.Execute(() => {
+                if (_graphView.nodes.ToList().Count == 0)
+                {
+                    _graphView.CreateNode(new EndNode(), new Vector2(600, 200));
+                }
+            }).StartingIn(50);
         }
     }
 }

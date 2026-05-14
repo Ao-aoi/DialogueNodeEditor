@@ -96,9 +96,14 @@ namespace DialogueNodeEditor{
 
         public void NotifyConnections()
         {
-            foreach(var edge in _outputPort.connections)
+            var graphView = this.GetFirstAncestorOfType<DialogueGraphView>();
+            if (graphView != null)
             {
-                if(edge.input.node is DialogueNode dNode) dNode.UpdateCharacterState();
+                // 全てのDialogueNodeに更新を通知してプルダウンのリストを同期する
+                foreach (var node in graphView.nodes.ToList().OfType<DialogueNode>())
+                {
+                    node.UpdateCharacterState();
+                }
             }
         }
     }
@@ -112,11 +117,16 @@ namespace DialogueNodeEditor{
         public Port CharacterInputPort;
         private TextField _speakerNameField;
         private DropdownField _expressionDropdown;
+        public DropdownField CharacterDropdown;
 
         public DialogueNode()
         {
             title = "Dialogue Node";
             style.width = 300;
+
+            CharacterDropdown = new DropdownField("Character", new List<string> { "None (Custom)" }, "None (Custom)");
+            CharacterDropdown.RegisterValueChangedCallback(evt => UpdateCharacterState());
+            mainContainer.Add(CharacterDropdown);
 
             _speakerNameField = new TextField("Speaker Name");
             _speakerNameField.RegisterValueChangedCallback(evt => SpeakerName = evt.newValue);
@@ -152,25 +162,59 @@ namespace DialogueNodeEditor{
 
         public void UpdateCharacterState()
         {
+            var graphView = this.GetFirstAncestorOfType<DialogueGraphView>();
+            List<CharacterNode> charNodes = new List<CharacterNode>();
+            if (graphView != null) charNodes = graphView.nodes.ToList().OfType<CharacterNode>().ToList();
+
+            // プルダウンのリストを更新
+            var charNames = new List<string> { "None (Custom)" };
+            charNames.AddRange(charNodes.Select(c => c.CharacterName));
+            CharacterDropdown.choices = charNames;
+
+            // 存在しない名前が選ばれていたら戻す
+            if (!charNames.Contains(CharacterDropdown.value)) CharacterDropdown.SetValueWithoutNotify("None (Custom)");
+
             var edges = CharacterInputPort.connections.ToList();
-            if (edges.Count > 0 && edges[0].output.node is CharacterNode charNode)
+            if (edges.Count > 0 && edges[0].output.node is CharacterNode connectedCharNode)
             {
+                // ■ 線が繋がれている場合は線を優先
+                CharacterDropdown.style.display = DisplayStyle.None;
                 _speakerNameField.style.display = DisplayStyle.None;
-                SpeakerName = charNode.CharacterName;
+                SpeakerName = connectedCharNode.CharacterName;
                 
                 _expressionDropdown.style.display = DisplayStyle.Flex;
-                var exprNames = charNode.Expressions.Select(e => e.Name).ToList();
+                var exprNames = connectedCharNode.Expressions.Select(e => e.Name).ToList();
                 _expressionDropdown.choices = exprNames;
-                
                 if (exprNames.Count > 0 && !exprNames.Contains(Expression)) Expression = exprNames[0];
                 _expressionDropdown.SetValueWithoutNotify(Expression);
             }
             else
             {
-                _speakerNameField.style.display = DisplayStyle.Flex;
-                _speakerNameField.value = SpeakerName; 
-                _expressionDropdown.style.display = DisplayStyle.None;
-                Expression = "";
+                // ■ 線が繋がれていない場合はプルダウンを使う
+                CharacterDropdown.style.display = DisplayStyle.Flex;
+                
+                if (CharacterDropdown.value == "None (Custom)")
+                {
+                    _speakerNameField.style.display = DisplayStyle.Flex;
+                    _speakerNameField.value = SpeakerName; 
+                    _expressionDropdown.style.display = DisplayStyle.None;
+                    Expression = "";
+                }
+                else
+                {
+                    _speakerNameField.style.display = DisplayStyle.None;
+                    SpeakerName = CharacterDropdown.value;
+                    
+                    var selectedCharNode = charNodes.FirstOrDefault(c => c.CharacterName == CharacterDropdown.value);
+                    if (selectedCharNode != null)
+                    {
+                        _expressionDropdown.style.display = DisplayStyle.Flex;
+                        var exprNames = selectedCharNode.Expressions.Select(e => e.Name).ToList();
+                        _expressionDropdown.choices = exprNames;
+                        if (exprNames.Count > 0 && !exprNames.Contains(Expression)) Expression = exprNames[0];
+                        _expressionDropdown.SetValueWithoutNotify(Expression);
+                    }
+                }
             }
         }
 
@@ -191,6 +235,17 @@ namespace DialogueNodeEditor{
 
         private void RemoveChoicePort(Port port)
         {
+            // ▼追加: ポートに接続されているEdge(線)があれば削除する
+            if (port.connections.Any())
+            {
+                var graphView = port.GetFirstAncestorOfType<DialogueGraphView>();
+                if (graphView != null)
+                {
+                    var edgesToDelete = port.connections.ToList();
+                    graphView.DeleteElements(edgesToDelete);
+                }
+            }
+
             outputContainer.Remove(port);
             RefreshExpandedState(); RefreshPorts();
         }
@@ -257,6 +312,22 @@ namespace DialogueNodeEditor{
         public void LoadData(float width)
         {
             PanelWidth = width; mainContainer.Query<FloatField>().First().SetValueWithoutNotify(width);
+        }
+    }
+
+    public class EndNode : BaseGraphNode
+    {
+        public EndNode()
+        {
+            title = "End Node";
+            style.width = 150;
+
+            var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(FlowPort));
+            inputPort.portName = "Input";
+            inputContainer.Add(inputPort);
+
+            RefreshExpandedState();
+            RefreshPorts();
         }
     }
 }

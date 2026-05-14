@@ -87,6 +87,7 @@ namespace DialogueNodeEditor
 
             evt.menu.AppendAction("Add Dialogue Node", action => CreateNode(new DialogueNode(), mousePosition));
             evt.menu.AppendAction("Add Character Setting", action => CreateNode(new CharacterNode(), mousePosition));
+            evt.menu.AppendAction("Add End Node", action => CreateNode(new EndNode(), mousePosition));
             evt.menu.AppendAction("Add Setting/Portrait", action => CreateNode(new PortraitNode(), mousePosition));
             evt.menu.AppendAction("Add Setting/Still", action => CreateNode(new StillNode(), mousePosition));
             evt.menu.AppendAction("Add Setting/Panel Size", action => CreateNode(new PanelSizeNode(), mousePosition));

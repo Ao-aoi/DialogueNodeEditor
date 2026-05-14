@@ -13,14 +13,8 @@ MonoBehaviour:
   m_Name: Demo Narrative
   m_EditorClassIdentifier: 
   NodeLinks:
-  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
-    PortName: Character Output
-    TargetNodeGuid: f3f0fb2f-6e97-4891-a2dc-c75b510fe70e
   - BaseNodeGuid: f3f0fb2f-6e97-4891-a2dc-c75b510fe70e
     PortName: Next
-    TargetNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
-  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
-    PortName: Character Output
     TargetNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
   - BaseNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
     PortName: 
@@ -28,26 +22,42 @@ MonoBehaviour:
   - BaseNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
     PortName: 
     TargetNodeGuid: 893e2d09-ba45-4a39-b12f-dd8570191537
-  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
+  - BaseNodeGuid: 68f8c84e-8578-47fa-ae5d-71a18424c1af
+    PortName: Character Output
+    TargetNodeGuid: f3f0fb2f-6e97-4891-a2dc-c75b510fe70e
+  - BaseNodeGuid: 68f8c84e-8578-47fa-ae5d-71a18424c1af
+    PortName: Character Output
+    TargetNodeGuid: 7a38a758-8d48-4e8f-bf7b-e694769daea7
+  - BaseNodeGuid: 68f8c84e-8578-47fa-ae5d-71a18424c1af
     PortName: Character Output
     TargetNodeGuid: 023561a9-5064-4718-880b-597f47ebf454
-  - BaseNodeGuid: ad2885ac-5f5b-4295-875e-b8de45dd2dec
+  - BaseNodeGuid: 68f8c84e-8578-47fa-ae5d-71a18424c1af
     PortName: Character Output
     TargetNodeGuid: 893e2d09-ba45-4a39-b12f-dd8570191537
   DialogueNodeData:
   - NodeGUID: f3f0fb2f-6e97-4891-a2dc-c75b510fe70e
-    SpeakerName: Sample
+    SpeakerName: Sam
     DialogueText: Hi! This is Demo.
-    Position: {x: 112, y: 10.666668}
+    Position: {x: 50.666668, y: -10.666667}
   - NodeGUID: 7a38a758-8d48-4e8f-bf7b-e694769daea7
-    SpeakerName: Sample
+    SpeakerName: Sam
     DialogueText: Please select 'Yes'.
-    Position: {x: 401.33334, y: 8}
-  - NodeGUID: 893e2d09-ba45-4a39-b12f-dd8570191537
-    SpeakerName: Sample
-    DialogueText: I told you to pick 'Yes'...
-    Position: {x: 753.3333, y: 150}
+    Position: {x: 382.66666, y: -12}
   - NodeGUID: 023561a9-5064-4718-880b-597f47ebf454
-    SpeakerName: Sample
+    SpeakerName: Sam
     DialogueText: Exactly!
-    Position: {x: 747.3333, y: -37.333332}
+    Position: {x: 746, y: -35.333332}
+  - NodeGUID: 893e2d09-ba45-4a39-b12f-dd8570191537
+    SpeakerName: Sam
+    DialogueText: I told you to pick 'Yes'...
+    Position: {x: 746.6667, y: 148.66667}
+  CharacterNodeData:
+  - NodeGUID: 68f8c84e-8578-47fa-ae5d-71a18424c1af
+    CharacterName: Sam
+    ExpressionList:
+    - Normal
+    - Happy
+    Position: {x: -159.33333, y: 222.66667}
+  PortraitNodeData: []
+  StillNodeData: []
+  PanelSizeNodeData: []

@@ -65,6 +65,20 @@ namespace DialogueNodeEditor{
             RefreshExpandedState();
             RefreshPorts();
         }
+        public void LoadData(string name, List<string> expressions)
+        {
+            CharacterName = name;
+            var nameField = mainContainer.Query<TextField>().First();
+            nameField.SetValueWithoutNotify(name); // イベントを多重発火させない
+
+            _expressionContainer.Clear();
+            ExpressionList.Clear();
+
+            foreach (var expr in expressions)
+            {
+                AddExpression(expr);
+            }
+        }
 
         private void AddExpression(string exprName)
         {
@@ -234,6 +248,12 @@ namespace DialogueNodeEditor{
             RefreshExpandedState();
             RefreshPorts();
         }
+        public void LoadData(Sprite sprite)
+        {
+            PortraitImage = sprite;
+            var objField = mainContainer.Query<ObjectField>().First();
+            objField.SetValueWithoutNotify(sprite);
+        }
     }
 
     // 3. スチル設定ノード
@@ -270,6 +290,20 @@ namespace DialogueNodeEditor{
             RefreshExpandedState();
             RefreshPorts();
         }
+
+        public void LoadData(Sprite sprite, bool scroll, float amount, float speed)
+        {
+            StillImage = sprite;
+            ShouldScrollStill = scroll;
+            ScrollAmount = amount;
+            ScrollSpeed = speed;
+
+            mainContainer.Query<ObjectField>().First().SetValueWithoutNotify(sprite);
+            mainContainer.Query<Toggle>().First().SetValueWithoutNotify(scroll);
+            var floatFields = mainContainer.Query<FloatField>().ToList();
+            floatFields[0].SetValueWithoutNotify(amount);
+            floatFields[1].SetValueWithoutNotify(speed);
+        }
     }
 
     // 4. パネルサイズ設定ノード
@@ -290,6 +324,11 @@ namespace DialogueNodeEditor{
 
             RefreshExpandedState();
             RefreshPorts();
+        }
+        public void LoadData(float width)
+        {
+            PanelWidth = width;
+            mainContainer.Query<FloatField>().First().SetValueWithoutNotify(width);
         }
     }
 }

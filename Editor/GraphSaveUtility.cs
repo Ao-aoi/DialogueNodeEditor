@@ -10,24 +10,36 @@ namespace DialogueNodeEditor
     public class GraphSaveUtility
     {
         private DialogueGraphView _targetGraphView;
-        private DialogueContainer _containerCache;
-
         private List<Edge> Edges => _targetGraphView.edges.ToList();
-        // DialogueGraphNode から BaseGraphNode に変更
         private List<BaseGraphNode> Nodes => _targetGraphView.nodes.ToList().Cast<BaseGraphNode>().ToList();
 
         public static GraphSaveUtility GetInstance(DialogueGraphView targetGraphView)
         {
-            return new GraphSaveUtility
-            {
-                _targetGraphView = targetGraphView
-            };
+            return new GraphSaveUtility { _targetGraphView = targetGraphView };
         }
 
-        public void SaveGraph(string fileName)
+        public void SaveGraph(string assetPath)
         {
-            var dialogueContainer = ScriptableObject.CreateInstance<DialogueContainer>();
+            var dialogueContainer = AssetDatabase.LoadAssetAtPath<DialogueContainer>(assetPath);
+            bool isNew = false;
+            
+            if (dialogueContainer == null)
+            {
+                dialogueContainer = ScriptableObject.CreateInstance<DialogueContainer>();
+                isNew = true;
+            }
+            else
+            {
+                // 上書きの場合は既存データをクリア
+                dialogueContainer.NodeLinks.Clear();
+                dialogueContainer.DialogueNodeData.Clear();
+                dialogueContainer.CharacterNodeData.Clear();
+                dialogueContainer.PortraitNodeData.Clear();
+                dialogueContainer.StillNodeData.Clear();
+                dialogueContainer.PanelSizeNodeData.Clear();
+            }
 
+            // リンクの保存
             var connectedPorts = Edges.Where(x => x.input.node != null).ToArray();
             foreach (var edge in connectedPorts)
             {
@@ -42,40 +54,62 @@ namespace DialogueNodeEditor
                 });
             }
 
+            // ノードの保存
             foreach (var baseNode in Nodes)
             {
-                // 現時点ではDialogueNodeのみ保存（他の設定ノードの保存対応は今後の拡張課題）
                 if (baseNode is DialogueNode dialogueNode)
                 {
-                    dialogueContainer.DialogueNodeData.Add(new DialogueNodeData
-                    {
-                        NodeGUID = dialogueNode.GUID,
-                        SpeakerName = dialogueNode.SpeakerName,
-                        DialogueText = dialogueNode.DialogueText,
-                        Position = dialogueNode.GetPosition().position
+                    dialogueContainer.DialogueNodeData.Add(new DialogueNodeData {
+                        NodeGUID = dialogueNode.GUID, SpeakerName = dialogueNode.SpeakerName,
+                        DialogueText = dialogueNode.DialogueText, Position = dialogueNode.GetPosition().position
+                    });
+                }
+                else if (baseNode is CharacterNode characterNode)
+                {
+                    dialogueContainer.CharacterNodeData.Add(new CharacterNodeData {
+                        NodeGUID = characterNode.GUID, CharacterName = characterNode.CharacterName,
+                        ExpressionList = new List<string>(characterNode.ExpressionList), Position = characterNode.GetPosition().position
+                    });
+                }
+                else if (baseNode is PortraitNode portraitNode)
+                {
+                    dialogueContainer.PortraitNodeData.Add(new PortraitNodeData {
+                        NodeGUID = portraitNode.GUID, PortraitImage = portraitNode.PortraitImage, Position = portraitNode.GetPosition().position
+                    });
+                }
+                else if (baseNode is StillNode stillNode)
+                {
+                    dialogueContainer.StillNodeData.Add(new StillNodeData {
+                        NodeGUID = stillNode.GUID, StillImage = stillNode.StillImage,
+                        ShouldScrollStill = stillNode.ShouldScrollStill, ScrollAmount = stillNode.ScrollAmount,
+                        ScrollSpeed = stillNode.ScrollSpeed, Position = stillNode.GetPosition().position
+                    });
+                }
+                else if (baseNode is PanelSizeNode panelSizeNode)
+                {
+                    dialogueContainer.PanelSizeNodeData.Add(new PanelSizeNodeData {
+                        NodeGUID = panelSizeNode.GUID, PanelWidth = panelSizeNode.PanelWidth, Position = panelSizeNode.GetPosition().position
                     });
                 }
             }
 
-            if (!AssetDatabase.IsValidFolder("Assets/Resources"))
-                AssetDatabase.CreateFolder("Assets", "Resources");
-
-            AssetDatabase.CreateAsset(dialogueContainer, $"Assets/Resources/{fileName}.asset");
+            if (isNew)
+            {
+                AssetDatabase.CreateAsset(dialogueContainer, assetPath);
+            }
+            else
+            {
+                EditorUtility.SetDirty(dialogueContainer);
+            }
             AssetDatabase.SaveAssets();
         }
 
-        public void LoadGraph(string fileName)
+        public void LoadGraph(DialogueContainer container)
         {
-            _containerCache = Resources.Load<DialogueContainer>(fileName);
-            if (_containerCache == null)
-            {
-                EditorUtility.DisplayDialog("File Not Found", "Target dialogue graph file does not exist!", "OK");
-                return;
-            }
-
+            if (container == null) return;
             ClearGraph();
-            CreateNodes();
-            ConnectNodes();
+            CreateNodes(container);
+            ConnectNodes(container);
         }
 
         private void ClearGraph()
@@ -87,33 +121,68 @@ namespace DialogueNodeEditor
             }
         }
 
-        private void CreateNodes()
+        private void CreateNodes(DialogueContainer container)
         {
-            foreach (var nodeData in _containerCache.DialogueNodeData)
+            foreach (var nodeData in container.DialogueNodeData)
             {
                 var tempNode = _targetGraphView.CreateDialogueNode(nodeData.SpeakerName, nodeData.DialogueText, nodeData.Position);
-                tempNode.GUID = nodeData.NodeGUID; 
+                tempNode.GUID = nodeData.NodeGUID;
+                _targetGraphView.AddElement(tempNode);
+            }
+            foreach (var data in container.CharacterNodeData)
+            {
+                var tempNode = new CharacterNode();
+                tempNode.SetPosition(new Rect(data.Position, new Vector2(300, 150)));
+                tempNode.LoadData(data.CharacterName, data.ExpressionList);
+                tempNode.GUID = data.NodeGUID;
+                _targetGraphView.AddElement(tempNode);
+            }
+            foreach (var data in container.PortraitNodeData)
+            {
+                var tempNode = new PortraitNode();
+                tempNode.SetPosition(new Rect(data.Position, new Vector2(200, 150)));
+                tempNode.LoadData(data.PortraitImage);
+                tempNode.GUID = data.NodeGUID;
+                _targetGraphView.AddElement(tempNode);
+            }
+            foreach (var data in container.StillNodeData)
+            {
+                var tempNode = new StillNode();
+                tempNode.SetPosition(new Rect(data.Position, new Vector2(200, 150)));
+                tempNode.LoadData(data.StillImage, data.ShouldScrollStill, data.ScrollAmount, data.ScrollSpeed);
+                tempNode.GUID = data.NodeGUID;
+                _targetGraphView.AddElement(tempNode);
+            }
+            foreach (var data in container.PanelSizeNodeData)
+            {
+                var tempNode = new PanelSizeNode();
+                tempNode.SetPosition(new Rect(data.Position, new Vector2(200, 150)));
+                tempNode.LoadData(data.PanelWidth);
+                tempNode.GUID = data.NodeGUID;
                 _targetGraphView.AddElement(tempNode);
             }
         }
 
-        private void ConnectNodes()
+        private void ConnectNodes(DialogueContainer container)
         {
             for (var i = 0; i < Nodes.Count; i++)
             {
-                var connections = _containerCache.NodeLinks.Where(x => x.BaseNodeGuid == Nodes[i].GUID).ToList();
+                var connections = container.NodeLinks.Where(x => x.BaseNodeGuid == Nodes[i].GUID).ToList();
                 for (var j = 0; j < connections.Count; j++)
                 {
                     var targetNodeGuid = connections[j].TargetNodeGuid;
                     var targetNode = Nodes.First(x => x.GUID == targetNodeGuid);
                     
                     var outputPort = Nodes[i].outputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == connections[j].PortName);
-                    // ノード間の遷移は FlowPort 型のポート同士を繋ぐ
-                    var inputPort = targetNode.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == typeof(FlowPort));
-
-                    if (outputPort != null && inputPort != null)
+                    
+                    // 出力ポートと同じ型（FlowPort, CharacterPortなど）の入力ポートを探して繋ぐ
+                    if (outputPort != null)
                     {
-                        LinkNodes(outputPort, inputPort);
+                        var inputPort = targetNode.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == outputPort.portType);
+                        if (inputPort != null)
+                        {
+                            LinkNodes(outputPort, inputPort);
+                        }
                     }
                 }
             }

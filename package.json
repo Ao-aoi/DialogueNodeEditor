@@ -1,5 +1,5 @@
 {
-  "name": "com.para.dialoguenodeeditor",
+  "name": "com.ao-aoi.dialoguenodeeditor",
   "version": "1.0.0",
   "displayName": "Dialogue Node Editor",
   "description": "A graph-based dialogue node editor for Unity.",
@@ -12,8 +12,8 @@
     "graphview"
   ],
   "author": {
-    "name": "para",
+    "name": "Ao-aoi",
     "email": "orimposs@gmail.com",
-    "url": "https://github.com/yourusername"
+    "url": "https://github.com/Ao-aoi/DialogueNodeEditor.git"
   }
 }

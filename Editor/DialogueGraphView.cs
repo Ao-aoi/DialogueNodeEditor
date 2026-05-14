@@ -41,7 +41,7 @@ public class DialogueGraphView : GraphView
     // ノード生成関数
     public void CreateNode(string nodeName, Vector2 position = default)
     {
-        var DialogueGraphNode = new DialogueGraphNode
+        var dialogueNode = new DialogueGraphNode
         {
             title = nodeName,
             DialogueText = "New Text",
@@ -49,23 +49,31 @@ public class DialogueGraphView : GraphView
         };
 
         // 入力ポート（左側：前のノードから）
-        var inputPort = GeneratePort(DialogueGraphNode, Direction.Input, Port.Capacity.Multi);
+        var inputPort = GeneratePort(dialogueNode, Direction.Input, Port.Capacity.Multi);
         inputPort.portName = "Input";
-        DialogueGraphNode.inputContainer.Add(inputPort);
+        dialogueNode.inputContainer.Add(inputPort);
 
         // 出力ポート（右側：次のノードへ）
-        var nextNodePort = GeneratePort(DialogueGraphNode, Direction.Output, Port.Capacity.Single);
+        var nextNodePort = GeneratePort(dialogueNode, Direction.Output, Port.Capacity.Single);
         nextNodePort.portName = "Next Node";
-        DialogueGraphNode.outputContainer.Add(nextNodePort);
+        dialogueNode.outputContainer.Add(nextNodePort);
 
+        var addChoiceButton = new Button(() => dialogueNode.AddChoicePort()) { text = "Add Choice" };
+        dialogueNode.titleButtonContainer.Add(addChoiceButton);
+
+        // デフォルトの「次へ(Next)」ポートを追加
+        var defaultNextPort = dialogueNode.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
+        defaultNextPort.portName = "Next (Default)";
+        dialogueNode.outputContainer.Add(defaultNextPort);
+        
         // UIを更新してグラフに配置
-        DialogueGraphNode.RefreshExpandedState();
-        DialogueGraphNode.RefreshPorts();
+        dialogueNode.RefreshExpandedState();
+        dialogueNode.RefreshPorts();
         
         // 引数の position を使って位置を設定
-        DialogueGraphNode.SetPosition(new Rect(position, new Vector2(300, 150)));
+        dialogueNode.SetPosition(new Rect(position, new Vector2(300, 150)));
 
-        AddElement(DialogueGraphNode);
+        AddElement(dialogueNode);
     }
 
     private Port GeneratePort(DialogueGraphNode node, Direction portDirection, Port.Capacity capacity = Port.Capacity.Single)

@@ -1,0 +1,19 @@
+{
+  "name": "com.para.dialoguenodeeditor",
+  "version": "1.0.0",
+  "displayName": "Dialogue Node Editor",
+  "description": "A graph-based dialogue node editor for Unity.",
+  "unity": "2021.3",
+  "dependencies": {},
+  "keywords": [
+    "dialogue",
+    "node",
+    "editor",
+    "graphview"
+  ],
+  "author": {
+    "name": "para",
+    "email": "orimposs@gmail.com",
+    "url": "https://github.com/yourusername"
+  }
+}

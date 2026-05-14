@@ -147,5 +147,122 @@ namespace DialogueNodeEditor
             node.SetPosition(new Rect(position, new Vector2(300, 150)));
             return node;
         }
+
+        // ★追加: 自動整列機能（Auto Layout）
+        public void AutoLayoutNodes()
+        {
+            var allNodes = nodes.ToList().OfType<BaseGraphNode>().ToList();
+            if (allNodes.Count == 0) return;
+
+            var startNode = allNodes.OfType<StartNode>().FirstOrDefault();
+            if (startNode == null)
+            {
+                UnityEditor.EditorUtility.DisplayDialog("Error", "Start Node not found. Cannot auto-layout.", "OK");
+                return;
+            }
+
+            // 1. Calculate depths for Flow nodes
+            var flowDepthMap = new Dictionary<BaseGraphNode, int>();
+            var queue = new Queue<BaseGraphNode>();
+
+            flowDepthMap[startNode] = 0;
+            queue.Enqueue(startNode);
+
+            while (queue.Count > 0)
+            {
+                var curr = queue.Dequeue();
+                int d = flowDepthMap[curr];
+
+                var flowPorts = curr.outputContainer.Children().OfType<Port>().Where(p => p.portType == typeof(FlowPort) || p.portType.Name == "FlowPort");
+                foreach (var port in flowPorts)
+                {
+                    foreach (var edge in port.connections)
+                    {
+                        var target = edge.input.node as BaseGraphNode;
+                        if (target == null) continue;
+
+                        int targetD = d + 1;
+                        if (!flowDepthMap.ContainsKey(target) || flowDepthMap[target] < targetD)
+                        {
+                            flowDepthMap[target] = targetD;
+                            queue.Enqueue(target);
+                        }
+                    }
+                }
+            }
+
+            // 2. Arrange flow nodes
+            float startX = 0;
+            float startY = 0;
+            float xStep = 450f;
+            float yStep = 300f;
+
+            var depthGroups = flowDepthMap.GroupBy(kvp => kvp.Value).OrderBy(g => g.Key).ToList();
+            var arrangedNodes = new HashSet<BaseGraphNode>();
+
+            foreach (var group in depthGroups)
+            {
+                int depth = group.Key;
+                var groupNodes = group.Select(kvp => kvp.Key).ToList();
+
+                float currentY = startY;
+                foreach (var node in groupNodes)
+                {
+                    node.SetPosition(new Rect(new Vector2(startX + depth * xStep, currentY), Vector2.zero));
+                    arrangedNodes.Add(node);
+                    
+                    // Arrange connected input nodes (Settings)
+                    float settingY = currentY + 150f;
+                    int settingCount = 0;
+
+                    var inputPorts = node.inputContainer.Children().OfType<Port>().Where(p => p.portType != typeof(FlowPort));
+                    foreach (var inPort in inputPorts)
+                    {
+                        foreach (var edge in inPort.connections)
+                        {
+                            var settingNode = edge.output.node as BaseGraphNode;
+                            if (settingNode != null && !arrangedNodes.Contains(settingNode))
+                            {
+                                settingNode.SetPosition(new Rect(new Vector2(startX + depth * xStep - 250f, settingY + (settingCount * 120f)), Vector2.zero));
+                                arrangedNodes.Add(settingNode);
+                                settingCount++;
+                            }
+                        }
+                    }
+                    
+                    // Typing Speed の隠しポートも考慮
+                    if (node is DialogueNode dNode && dNode.TypingSpeedInputPort != null)
+                    {
+                        foreach (var edge in dNode.TypingSpeedInputPort.connections)
+                        {
+                            var settingNode = edge.output.node as BaseGraphNode;
+                            if (settingNode != null && !arrangedNodes.Contains(settingNode))
+                            {
+                                settingNode.SetPosition(new Rect(new Vector2(startX + depth * xStep - 250f, settingY + (settingCount * 120f)), Vector2.zero));
+                                arrangedNodes.Add(settingNode);
+                                settingCount++;
+                            }
+                        }
+                    }
+
+                    currentY += yStep + (settingCount * 120f); 
+                }
+            }
+
+            // 3. Arrange unlinked nodes
+            var unlinkedNodes = allNodes.Where(n => !arrangedNodes.Contains(n)).ToList();
+            float unlinkedX = startX;
+            float unlinkedY = startY - 250f;
+            foreach (var node in unlinkedNodes)
+            {
+                node.SetPosition(new Rect(new Vector2(unlinkedX, unlinkedY), Vector2.zero));
+                unlinkedX += 300f;
+                if (unlinkedX > 1500f)
+                {
+                    unlinkedX = startX;
+                    unlinkedY -= 250f;
+                }
+            }
+        }
     }
 }

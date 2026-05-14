@@ -185,6 +185,7 @@ namespace DialogueNodeEditor
                     node.OverrideTypingSpeed = data.OverrideTypingSpeed;
                     node.TypingSpeedToggle.SetValueWithoutNotify(data.OverrideTypingSpeed);
                     node.TypingSpeedField.SetValueWithoutNotify(data.TypingSpeedValue);
+                    node.TypingSpeedValue = data.TypingSpeedValue;
                     
                     node.CanSkipTyping = data.CanSkipTyping;
                     node.CanSkipTypingToggle.SetValueWithoutNotify(data.CanSkipTyping);

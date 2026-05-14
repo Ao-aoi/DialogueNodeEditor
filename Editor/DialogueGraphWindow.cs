@@ -76,6 +76,9 @@ namespace DialogueNodeEditor
             toolbar.Add(new Button(() => LoadDataDialog()) { text = "Load" });
             toolbar.Add(new Button(() => { _graphView.CreateNode(new DialogueNode(), Vector2.zero); }) { text = "Add Node" });
 
+            // ★追加: 自動整列（Auto Layout）ボタン
+            toolbar.Add(new Button(() => _graphView.AutoLayoutNodes()) { text = "Auto Layout" });
+
             rootVisualElement.Add(toolbar);
         }
 

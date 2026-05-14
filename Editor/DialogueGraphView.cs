@@ -2,125 +2,78 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace DialogueNodeEditor
 {
-public class DialogueGraphView : GraphView
-{
-    public DialogueGraphView(DialogueGraphWindow editorWindow)
+    public class DialogueGraphView : GraphView
     {
-        SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
-
-        // 背景のグリッドを追加
-        Insert(0, new GridBackground());
-
-        // ノードのドラッグやパン操作を有効化
-        this.AddManipulator(new ContentDragger());
-        this.AddManipulator(new SelectionDragger());
-        this.AddManipulator(new RectangleSelector());
-
-        // スタイルシート（CSS）で背景の見た目をShaderGraph風の暗いグリッドにする（任意設定）
-        var styleSheet = ScriptableObject.CreateInstance<StyleSheet>();
-        styleSheets.Add(styleSheet);
-    }
-
-    // ノード同士を繋げるルールの設定
-    public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
-    {
-        var compatiblePorts = new List<Port>();
-        ports.ForEach((port) =>
+        public DialogueGraphView(DialogueGraphWindow editorWindow)
         {
-            // 同じノード同士、または同じ入出力方向（Input同士など）は繋げない
-            if (startPort != port && startPort.node != port.node && startPort.direction != port.direction)
+            SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
+
+            Insert(0, new GridBackground());
+
+            this.AddManipulator(new ContentDragger());
+            this.AddManipulator(new SelectionDragger());
+            this.AddManipulator(new RectangleSelector());
+
+            var styleSheet = ScriptableObject.CreateInstance<StyleSheet>();
+            styleSheets.Add(styleSheet);
+        }
+
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        {
+            var compatiblePorts = new List<Port>();
+            ports.ForEach((port) =>
             {
-                compatiblePorts.Add(port);
+                if (startPort != port && startPort.node != port.node && startPort.direction != port.direction)
+                {
+                    if (startPort.portType == port.portType)
+                    {
+                        compatiblePorts.Add(port);
+                    }
+                }
+            });
+            return compatiblePorts;
+        }
+
+        // Publicに変更して外部からノードを生成できるようにする
+        public void CreateNode(BaseGraphNode node, Vector2 position)
+        {
+            node.GUID = System.Guid.NewGuid().ToString();
+            node.SetPosition(new Rect(position, new Vector2(200, 150)));
+            AddElement(node);
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            base.BuildContextualMenu(evt);
+            var mousePosition = contentViewContainer.WorldToLocal(evt.localMousePosition);
+
+            evt.menu.AppendAction("Add Dialogue Node", action => CreateNode(new DialogueNode(), mousePosition));
+            evt.menu.AppendAction("Add Setting/Portrait", action => CreateNode(new PortraitNode(), mousePosition));
+            evt.menu.AppendAction("Add Setting/Still", action => CreateNode(new StillNode(), mousePosition));
+            evt.menu.AppendAction("Add Setting/Panel Size", action => CreateNode(new PanelSizeNode(), mousePosition));
+        }
+
+        // GraphSaveUtilityのロード処理で呼ばれる
+        public DialogueNode CreateDialogueNode(string speakerName, string text, Vector2 position)
+        {
+            var node = new DialogueNode();
+            node.SpeakerName = speakerName;
+            node.DialogueText = text;
+
+            // UIコンポーネント（TextField）にロードした値を反映
+            var textFields = node.mainContainer.Query<TextField>().ToList();
+            if (textFields.Count >= 2)
+            {
+                textFields[0].value = speakerName;
+                textFields[1].value = text;
             }
-        });
-        return compatiblePorts;
+
+            node.SetPosition(new Rect(position, new Vector2(300, 150)));
+            return node;
+        }
     }
-
-    // ノード生成関数
-    public void CreateNode(string nodeName, Vector2 position = default)
-    {
-        var dialogueNode = new DialogueGraphNode
-        {
-            title = nodeName,
-            DialogueText = "New Text",
-            GUID = System.Guid.NewGuid().ToString()
-        };
-
-        // 入力ポート（左側：前のノードから）
-        var inputPort = GeneratePort(dialogueNode, Direction.Input, Port.Capacity.Multi);
-        inputPort.portName = "Input";
-        dialogueNode.inputContainer.Add(inputPort);
-
-        // 出力ポート（右側：次のノードへ）
-        var nextNodePort = GeneratePort(dialogueNode, Direction.Output, Port.Capacity.Single);
-        nextNodePort.portName = "Next Node";
-        dialogueNode.outputContainer.Add(nextNodePort);
-
-        var addChoiceButton = new Button(() => dialogueNode.AddChoicePort()) { text = "Add Choice" };
-        dialogueNode.titleButtonContainer.Add(addChoiceButton);
-
-        // デフォルトの「次へ(Next)」ポートを追加
-        var defaultNextPort = dialogueNode.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
-        defaultNextPort.portName = "Next (Default)";
-        dialogueNode.outputContainer.Add(defaultNextPort);
-        
-        // UIを更新してグラフに配置
-        dialogueNode.RefreshExpandedState();
-        dialogueNode.RefreshPorts();
-        
-        // 引数の position を使って位置を設定
-        dialogueNode.SetPosition(new Rect(position, new Vector2(300, 150)));
-
-        AddElement(dialogueNode);
-    }
-
-    private Port GeneratePort(DialogueGraphNode node, Direction portDirection, Port.Capacity capacity = Port.Capacity.Single)
-    {
-        return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float)); 
-        // typeof(float)はダミーです。見た目の色を変えるために任意の型を使えます。
-    }
-
-    public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
-    {
-        base.BuildContextualMenu(evt);
-        
-        // "Add Dialogue Node" というメニューを追加
-        evt.menu.AppendAction("Add Dialogue Node", action => 
-        {
-            // マウスのローカル座標を取得してノード生成
-            var mousePosition = contentViewContainer.WorldToLocal(action.eventInfo.mousePosition);
-            CreateNode("Dialogue Node", mousePosition);
-        });
-    }
-
-    public DialogueGraphNode CreateDialogueNode(string speakerName, string text, Vector2 position)
-    {
-        var node = new DialogueGraphNode
-        {
-            title = "Dialogue Node",
-            SpeakerName = speakerName,
-            DialogueText = text,
-            GUID = System.Guid.NewGuid().ToString()
-        };
-
-        // UIフィールドにも値を反映させる処理が必要な場合はここで行います
-        // （DialogueGraphNodeのコンストラクタでフィールドを作成しているため、値の同期処理を追加するとより良くなります）
-
-        var inputPort = GeneratePort(node, Direction.Input, Port.Capacity.Multi);
-        inputPort.portName = "Input";
-        node.inputContainer.Add(inputPort);
-
-        var nextNodePort = GeneratePort(node, Direction.Output, Port.Capacity.Single);
-        nextNodePort.portName = "Next Node";
-        node.outputContainer.Add(nextNodePort);
-
-        node.RefreshExpandedState();
-        node.RefreshPorts();
-        node.SetPosition(new Rect(position, new Vector2(300, 150)));
-
-        return node;
-    }
-}
 }

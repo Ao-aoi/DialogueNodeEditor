@@ -70,6 +70,13 @@ namespace DialogueNodeEditor
                         stillGuid = sNode.GUID;
                     }
 
+                    string floatGuid = "";
+                    var floatEdges = dialogueNode.TypingSpeedInputPort.connections.ToList();
+                    if (floatEdges.Count > 0 && floatEdges[0].output.node is BaseGraphNode fNode)
+                    {
+                        floatGuid = fNode.GUID;
+                    }
+
                     dialogueContainer.DialogueNodeData.Add(new DialogueNodeData {
                         NodeGUID = dialogueNode.GUID, 
                         SpeakerName = dialogueNode.SpeakerName,
@@ -78,7 +85,11 @@ namespace DialogueNodeEditor
                         Position = dialogueNode.GetPosition().position, 
                         Choices = choices,
                         PortraitNodeGUID = portraitGuid,
-                        StillNodeGUID = stillGuid       
+                        StillNodeGUID = stillGuid,
+                        ShowSettings = dialogueNode.ShowSettings,               // 追加
+                        OverrideTypingSpeed = dialogueNode.OverrideTypingSpeed, // 追加
+                        TypingSpeedValue = dialogueNode.TypingSpeedField.value, // 追加
+                        TypingSpeedNodeGUID = floatGuid      
                     });
                 }
                 else if (baseNode is CharacterNode characterNode)
@@ -142,6 +153,14 @@ namespace DialogueNodeEditor
                         node.Expression = data.Expression;
                         var dropdown = node.mainContainer.Query<DropdownField>().Where(d => d.label == "Expression").First();
                         if (dropdown != null) dropdown.SetValueWithoutNotify(data.Expression);                    }
+
+                    node.ShowSettings = data.ShowSettings;
+                    node.OverrideTypingSpeed = data.OverrideTypingSpeed;
+                    node.TypingSpeedToggle.SetValueWithoutNotify(data.OverrideTypingSpeed);
+                    node.TypingSpeedField.SetValueWithoutNotify(data.TypingSpeedValue);
+                    
+                    node.TypingSpeedInputPort.style.display = data.OverrideTypingSpeed ? DisplayStyle.Flex : DisplayStyle.None;
+                    node.UpdateSettingsUI();
                 }
             }
         }

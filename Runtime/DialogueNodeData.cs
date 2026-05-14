@@ -17,6 +17,11 @@ namespace DialogueNodeEditor
         
         public string PortraitNodeGUID;
         public string StillNodeGUID;
+
+        public bool ShowSettings;
+        public bool OverrideTypingSpeed;
+        public float TypingSpeedValue;
+        public string TypingSpeedNodeGUID;
     }
 
     [Serializable]

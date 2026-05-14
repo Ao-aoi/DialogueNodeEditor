@@ -33,6 +33,7 @@ namespace DialogueNodeEditor
                 dialogueContainer.NodeLinks.Clear(); dialogueContainer.DialogueNodeData.Clear();
                 dialogueContainer.CharacterNodeData.Clear(); dialogueContainer.PortraitNodeData.Clear();
                 dialogueContainer.StillNodeData.Clear(); dialogueContainer.PanelSizeNodeData.Clear();
+                dialogueContainer.StartNodeData.Clear();
                 dialogueContainer.EndNodeData.Clear();
                 dialogueContainer.PropertyNodeData.Clear();
                 dialogueContainer.ExposedProperties.Clear();
@@ -47,6 +48,7 @@ namespace DialogueNodeEditor
                 });
             }
 
+            var dialogueDataList = new List<DialogueNodeData>();
             foreach (var baseNode in Nodes)
             {
                 if (baseNode is DialogueNode dialogueNode)
@@ -79,7 +81,7 @@ namespace DialogueNodeEditor
                         floatGuid = fNode.GUID;
                     }
 
-                    dialogueContainer.DialogueNodeData.Add(new DialogueNodeData {
+                    dialogueDataList.Add(new DialogueNodeData {
                         NodeGUID = dialogueNode.GUID, 
                         SpeakerName = dialogueNode.SpeakerName,
                         DialogueText = dialogueNode.DialogueText, 
@@ -135,6 +137,28 @@ namespace DialogueNodeEditor
                     });
                 }
             }
+
+            // If a DialogueNode is connected to the Start node, force it to be the first entry
+            var startConnectedGuid = "";
+            var startNodeCandidate = Nodes.OfType<StartNode>().FirstOrDefault();
+            if (startNodeCandidate != null)
+            {
+                var startEdge = Edges.FirstOrDefault(e => e.output.node == startNodeCandidate);
+                if (startEdge != null && startEdge.input.node is DialogueNode dNode) startConnectedGuid = dNode.GUID;
+            }
+
+            if (!string.IsNullOrEmpty(startConnectedGuid))
+            {
+                var idx = dialogueDataList.FindIndex(d => d.NodeGUID == startConnectedGuid);
+                if (idx > 0)
+                {
+                    var item = dialogueDataList[idx];
+                    dialogueDataList.RemoveAt(idx);
+                    dialogueDataList.Insert(0, item);
+                }
+            }
+
+            dialogueContainer.DialogueNodeData.AddRange(dialogueDataList);
 
             dialogueContainer.ExposedProperties.AddRange(_targetGraphView.ExposedProperties);
 

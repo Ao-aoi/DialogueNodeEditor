@@ -327,11 +327,12 @@ namespace DialogueNodeEditor{
             base.BuildContextualMenu(evt);
             evt.menu.AppendSeparator();
             evt.menu.AppendAction(ShowSettings ? "Hide Advanced Settings" : "Show Advanced Settings", a => ToggleSettings());
-            // ★追加: タイピング設定の一括適用
             evt.menu.AppendAction("Apply Typing Settings to All Nodes", a => ApplyTypingSettingsToAll());
+            
+            // ★追加: 選択されたノードのみに適用するメニュー
+            evt.menu.AppendAction("Apply Typing Settings to Selected Nodes", a => ApplyTypingSettingsToSelected());
         }
 
-        // ★追加: 設定一括適用メソッド
         private void ApplyTypingSettingsToAll()
         {
             var graphView = this.GetFirstAncestorOfType<DialogueGraphView>();
@@ -356,6 +357,42 @@ namespace DialogueNodeEditor{
                     count++;
                 }
                 UnityEditor.EditorUtility.DisplayDialog("Applied", $"Applied typing settings to {count} nodes.", "OK");
+            }
+        }
+
+        // ★追加: 選択されたノードのみに設定を適用するメソッド
+        private void ApplyTypingSettingsToSelected()
+        {
+            var graphView = this.GetFirstAncestorOfType<DialogueGraphView>();
+            if (graphView != null)
+            {
+                var selectedDialogueNodes = graphView.selection.OfType<DialogueNode>().ToList();
+                int count = 0;
+                foreach (var node in selectedDialogueNodes)
+                {
+                    if (node == this) continue; // 自分自身は対象外
+
+                    node.CanSkipTyping = this.CanSkipTyping;
+                    node.CanSkipTypingToggle.SetValueWithoutNotify(this.CanSkipTyping);
+                    
+                    node.OverrideTypingSpeed = this.OverrideTypingSpeed;
+                    node.TypingSpeedToggle.SetValueWithoutNotify(this.OverrideTypingSpeed);
+                    
+                    node.TypingSpeedValue = this.TypingSpeedField.value;
+                    node.TypingSpeedField.SetValueWithoutNotify(this.TypingSpeedField.value);
+                    
+                    node.TypingSpeedInputPort.style.display = this.OverrideTypingSpeed ? DisplayStyle.Flex : DisplayStyle.None;
+                    count++;
+                }
+
+                if (count > 0)
+                {
+                    UnityEditor.EditorUtility.DisplayDialog("Applied", $"Applied typing settings to {count} selected nodes.", "OK");
+                }
+                else
+                {
+                    UnityEditor.EditorUtility.DisplayDialog("Info", "No other Dialogue Nodes are selected.", "OK");
+                }
             }
         }
 

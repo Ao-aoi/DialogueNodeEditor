@@ -56,10 +56,29 @@ namespace DialogueNodeEditor
                         choices.Add(ports[i].portName);
                     }
 
+                    string portraitGuid = "";
+                    var portraitEdges = dialogueNode.PortraitInputPort.connections.ToList();
+                    if (portraitEdges.Count > 0 && portraitEdges[0].output.node is PortraitNode pNode)
+                    {
+                        portraitGuid = pNode.GUID;
+                    }
+
+                    string stillGuid = "";
+                    var stillEdges = dialogueNode.StillInputPort.connections.ToList();
+                    if (stillEdges.Count > 0 && stillEdges[0].output.node is StillNode sNode)
+                    {
+                        stillGuid = sNode.GUID;
+                    }
+
                     dialogueContainer.DialogueNodeData.Add(new DialogueNodeData {
-                        NodeGUID = dialogueNode.GUID, SpeakerName = dialogueNode.SpeakerName,
-                        DialogueText = dialogueNode.DialogueText, Expression = dialogueNode.Expression,
-                        Position = dialogueNode.GetPosition().position, Choices = choices
+                        NodeGUID = dialogueNode.GUID, 
+                        SpeakerName = dialogueNode.SpeakerName,
+                        DialogueText = dialogueNode.DialogueText, 
+                        Expression = dialogueNode.Expression,
+                        Position = dialogueNode.GetPosition().position, 
+                        Choices = choices,
+                        PortraitNodeGUID = portraitGuid,
+                        StillNodeGUID = stillGuid       
                     });
                 }
                 else if (baseNode is CharacterNode characterNode)

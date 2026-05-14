@@ -115,6 +115,9 @@ namespace DialogueNodeEditor{
         public string Expression;
 
         public Port CharacterInputPort;
+        public Port PortraitInputPort;
+        public Port StillInputPort;
+
         private TextField _speakerNameField;
         private DropdownField _expressionDropdown;
         public DropdownField CharacterDropdown;
@@ -149,6 +152,14 @@ namespace DialogueNodeEditor{
             CharacterInputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(CharacterPort));
             CharacterInputPort.portName = "Character";
             inputContainer.Add(CharacterInputPort);
+
+            PortraitInputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(PortraitPort));
+            PortraitInputPort.portName = "Portrait";
+            inputContainer.Add(PortraitInputPort);
+
+            StillInputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(StillPort));
+            StillInputPort.portName = "Still";
+            inputContainer.Add(StillInputPort);
 
             var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(FlowPort));
             outputPort.portName = "Next";

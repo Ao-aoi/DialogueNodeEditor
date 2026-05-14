@@ -14,6 +14,9 @@ namespace DialogueNodeEditor
         public string Expression; // 追加: 選択された表情名
         public Vector2 Position;
         public List<string> Choices = new List<string>(); // 追加: 選択肢ポート名リスト
+        
+        public string PortraitNodeGUID;
+        public string StillNodeGUID;
     }
 
     [Serializable]

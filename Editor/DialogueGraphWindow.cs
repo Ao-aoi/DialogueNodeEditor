@@ -13,6 +13,8 @@ namespace DialogueNodeEditor
         private string _currentAssetPath = "";
         private Label _pathLabel;
 
+        private const string LastOpenedContainerKey = "DialogueNodeEditor.LastOpenedContainerPath";
+
         [MenuItem("Window/Dialogue Node Editor")]
         public static void OpenDialogueGraphWindow()
         {
@@ -28,7 +30,7 @@ namespace DialogueNodeEditor
             {
                 var window = GetWindow<DialogueGraphWindow>();
                 window.titleContent = new GUIContent("Dialogue Editor");
-                window.LoadGraphFromAsset(container);
+                window.LoadGraphFromAsset(container, autoRestore: false);
                 return true;
             }
             return false;
@@ -39,6 +41,17 @@ namespace DialogueNodeEditor
             ConstructGraphView();
             GenerateToolbar();
             rootVisualElement.RegisterCallback<KeyDownEvent>(OnKeyDown);
+
+            // 再コンパイル後に最後に開いていたDialogueContainerを自動で開く
+            var lastPath = EditorPrefs.GetString(LastOpenedContainerKey, "");
+            if (!string.IsNullOrEmpty(lastPath))
+            {
+                var container = AssetDatabase.LoadAssetAtPath<DialogueContainer>(lastPath);
+                if (container != null)
+                {
+                    LoadGraphFromAsset(container, autoRestore: true);
+                }
+            }
         }
 
         private void OnDisable()
@@ -125,7 +138,7 @@ namespace DialogueNodeEditor
             var container = AssetDatabase.LoadAssetAtPath<DialogueContainer>(path);
             if (container != null)
             {
-                LoadGraphFromAsset(container);
+                LoadGraphFromAsset(container, autoRestore: false);
             }
             else
             {
@@ -133,12 +146,18 @@ namespace DialogueNodeEditor
             }
         }
 
-        public void LoadGraphFromAsset(DialogueContainer container)
+        public void LoadGraphFromAsset(DialogueContainer container, bool autoRestore = false)
         {
             if (_graphView == null) return;
 
             _currentAssetPath = AssetDatabase.GetAssetPath(container);
             UpdatePathLabel();
+
+            // 自動復元時以外はパスを保存
+            if (!autoRestore && !string.IsNullOrEmpty(_currentAssetPath))
+            {
+                EditorPrefs.SetString(LastOpenedContainerKey, _currentAssetPath);
+            }
 
             var saveUtility = GraphSaveUtility.GetInstance(_graphView);
             saveUtility.LoadGraph(container);

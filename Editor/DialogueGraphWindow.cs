@@ -160,16 +160,47 @@ namespace DialogueNodeEditor
 
             GenerateBlackboard();
 
-            // ★変更: 線をドロップした際にどのポートから引っ張ったかを取得して検索メニューに渡す
-            _graphView.nodeCreationRequest = context => 
+            // 線をドロップした際に引っ張ったポートがあれば自動で DialogueNode を作成して接続する
+            _graphView.nodeCreationRequest = context =>
             {
-                var searchWindow = ScriptableObject.CreateInstance<DialogueSearchWindow>();
                 Port sourcePort = null;
                 if (context.target is Edge edge) sourcePort = edge.output ?? edge.input;
                 else if (context.target is Port port) sourcePort = port;
 
-                searchWindow.Init(this, _graphView, sourcePort);
-                SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), searchWindow);
+                var windowMousePosition = rootVisualElement.ChangeCoordinatesTo(
+                    rootVisualElement.parent,
+                    context.screenMousePosition - position.position);
+                var graphMousePosition = _graphView.contentViewContainer.WorldToLocal(windowMousePosition);
+
+                // 新しい DialogueNode を作成
+                var newNode = new DialogueNode();
+                _graphView.CreateNode(newNode, graphMousePosition);
+
+                // 引っ張ってきたポートがあれば自動接続を試みる
+                if (sourcePort != null)
+                {
+                    Port targetPort = null;
+                    if (sourcePort.direction == Direction.Output)
+                    {
+                        targetPort = newNode.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == sourcePort.portType);
+                    }
+                    else
+                    {
+                        targetPort = newNode.outputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == sourcePort.portType);
+                    }
+
+                    if (targetPort != null)
+                    {
+                        var newEdge = new Edge
+                        {
+                            output = sourcePort.direction == Direction.Output ? sourcePort : targetPort,
+                            input = sourcePort.direction == Direction.Input ? sourcePort : targetPort
+                        };
+                        newEdge.input.Connect(newEdge);
+                        newEdge.output.Connect(newEdge);
+                        _graphView.AddElement(newEdge);
+                    }
+                }
             };
         
             _graphView.schedule.Execute(() => {

@@ -177,6 +177,7 @@ namespace DialogueNodeEditor
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
+            // --- 既存のEdge（線）の接続処理 ---
             if (graphViewChange.edgesToCreate != null)
             {
                 foreach (var edge in graphViewChange.edgesToCreate)
@@ -190,6 +191,8 @@ namespace DialogueNodeEditor
 
             if (graphViewChange.elementsToRemove != null)
             {
+                bool needsDropdownUpdate = false; // ★追加: キャラクターノードが消えたかチェック用フラグ
+
                 foreach (var elem in graphViewChange.elementsToRemove)
                 {
                     if (elem is Edge edge)
@@ -199,10 +202,31 @@ namespace DialogueNodeEditor
                             dNode.schedule.Execute(() => dNode.UpdateCharacterState()).StartingIn(10);
                         }
                     }
+                    // ★追加: CharacterNodeが削除された場合
+                    else if (elem is CharacterNode)
+                    {
+                        needsDropdownUpdate = true;
+                    }
+                }
+
+                // ★追加: 削除後に少し遅らせて全ダイアログノードのドロップダウンを更新する
+                if (needsDropdownUpdate)
+                {
+                    this.schedule.Execute(() => RefreshAllDialogueNodesDropdowns()).StartingIn(50);
                 }
             }
 
             return graphViewChange;
+        }
+
+        // ★追加: グラフ内の全 DialogueNode を探し、プルダウンを再構築するメソッド
+        public void RefreshAllDialogueNodesDropdowns()
+        {
+            var dialogueNodes = nodes.ToList().OfType<DialogueNode>();
+            foreach (var node in dialogueNodes)
+            {
+                node.UpdateCharacterState(); // キャラクターリストを再取得してドロップダウンを更新
+            }
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -226,6 +250,12 @@ namespace DialogueNodeEditor
             node.GUID = System.Guid.NewGuid().ToString();
             node.SetPosition(new Rect(position, new Vector2(200, 150)));
             AddElement(node);
+
+            // ★追加: もし追加されたノードがCharacterNodeだったら、プルダウンを一斉更新する
+            if (node is CharacterNode)
+            {
+                this.schedule.Execute(() => RefreshAllDialogueNodesDropdowns()).StartingIn(50);
+            }
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)

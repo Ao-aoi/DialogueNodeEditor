@@ -178,33 +178,15 @@ namespace DialogueNodeEditor
                 _targetGraphView.AddPropertyToBlackBoard(prop);
             }
 
-            CreateNodes(container); ConnectNodes(container);
+            CreateNodes(container); 
+            ConnectNodes(container);
 
             foreach (var node in Nodes.OfType<DialogueNode>())
             {
                 var data = container.DialogueNodeData.FirstOrDefault(x => x.NodeGUID == node.GUID);
                 if (data != null)
                 {
-                    var charNodes = Nodes.OfType<CharacterNode>().ToList();
-                    if (charNodes.Any(c => c.CharacterName == data.SpeakerName))
-                    {
-                        node.CharacterDropdown.SetValueWithoutNotify(data.SpeakerName);
-                    }
-                    else
-                    {
-                        node.CharacterDropdown.SetValueWithoutNotify("None (Custom)");
-                    }
-
-                    node.UpdateCharacterState();
-
-                    if (!string.IsNullOrEmpty(data.Expression))
-                    {
-                        node.Expression = data.Expression;
-                        // ★修正: ToList()を追加して、LINQのエラーが出ないようにしました
-                        var dropdown = node.mainContainer.Query<DropdownField>().ToList().FirstOrDefault(d => d.label == "Expression");
-                        if (dropdown != null) dropdown.SetValueWithoutNotify(data.Expression);                    
-                    }
-
+                    // --- (既存のデータ復元処理) ---
                     node.ShowSettings = data.ShowSettings;
                     node.OverrideTypingSpeed = data.OverrideTypingSpeed;
                     node.TypingSpeedToggle.SetValueWithoutNotify(data.OverrideTypingSpeed);
@@ -216,8 +198,14 @@ namespace DialogueNodeEditor
                     
                     node.TypingSpeedInputPort.style.display = data.OverrideTypingSpeed ? DisplayStyle.Flex : DisplayStyle.None;
                     node.UpdateSettingsUI();
+                    
+                    // ★追加: 保存されていたSpeakerNameを再度セットする
+                    node.SpeakerName = data.SpeakerName;
                 }
             }
+
+            // ★追加: ロード完了後に、一斉にプルダウンを更新する
+            _targetGraphView.schedule.Execute(() => _targetGraphView.RefreshAllDialogueNodesDropdowns()).StartingIn(100);
         }
 
         private void ClearGraph()

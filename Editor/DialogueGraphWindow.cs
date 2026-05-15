@@ -10,7 +10,7 @@ namespace DialogueNodeEditor
     public class DialogueGraphWindow : EditorWindow
     {
         private DialogueGraphView _graphView;
-        private string _currentAssetPath = "";
+        [SerializeField] private string _currentAssetPath = "";
         private Label _pathLabel;
 
         private const string LastOpenedContainerKey = "DialogueNodeEditor.LastOpenedContainerPath";
@@ -18,8 +18,30 @@ namespace DialogueNodeEditor
         [MenuItem("Window/Dialogue Node Editor")]
         public static void OpenDialogueGraphWindow()
         {
-            var window = GetWindow<DialogueGraphWindow>();
+            // アセット指定なしで開く場合は従来通り
+            var window = CreateInstance<DialogueGraphWindow>();
             window.titleContent = new GUIContent("Dialogue Editor");
+            window.Show();
+        }
+
+        public static DialogueGraphWindow OpenDialogueGraphWindow(string assetPath)
+        {
+            // 既存ウィンドウを探す
+            var windows = Resources.FindObjectsOfTypeAll<DialogueGraphWindow>();
+            foreach (var win in windows)
+            {
+                if (win._currentAssetPath == assetPath)
+                {
+                    win.Focus();
+                    return win;
+                }
+            }
+            // 新規作成
+            var window = CreateInstance<DialogueGraphWindow>();
+            window._currentAssetPath = assetPath;
+            window.titleContent = new GUIContent(System.IO.Path.GetFileName(assetPath));
+            window.Show();
+            return window;
         }
 
         [OnOpenAsset(1)]
@@ -28,8 +50,8 @@ namespace DialogueNodeEditor
             var container = EditorUtility.InstanceIDToObject(instanceID) as DialogueContainer;
             if (container != null)
             {
-                var window = GetWindow<DialogueGraphWindow>();
-                window.titleContent = new GUIContent("Dialogue Editor");
+                var assetPath = AssetDatabase.GetAssetPath(container);
+                var window = OpenDialogueGraphWindow(assetPath);
                 window.LoadGraphFromAsset(container, autoRestore: false);
                 return true;
             }
@@ -42,11 +64,10 @@ namespace DialogueNodeEditor
             GenerateToolbar();
             rootVisualElement.RegisterCallback<KeyDownEvent>(OnKeyDown);
 
-            // 再コンパイル後に最後に開いていたDialogueContainerを自動で開く
-            var lastPath = EditorPrefs.GetString(LastOpenedContainerKey, "");
-            if (!string.IsNullOrEmpty(lastPath))
+            // アセットパスがあれば自動復元
+            if (!string.IsNullOrEmpty(_currentAssetPath))
             {
-                var container = AssetDatabase.LoadAssetAtPath<DialogueContainer>(lastPath);
+                var container = AssetDatabase.LoadAssetAtPath<DialogueContainer>(_currentAssetPath);
                 if (container != null)
                 {
                     LoadGraphFromAsset(container, autoRestore: true);
@@ -138,7 +159,8 @@ namespace DialogueNodeEditor
             var container = AssetDatabase.LoadAssetAtPath<DialogueContainer>(path);
             if (container != null)
             {
-                LoadGraphFromAsset(container, autoRestore: false);
+                var window = OpenDialogueGraphWindow(path);
+                window.LoadGraphFromAsset(container, autoRestore: false);
             }
             else
             {
@@ -153,14 +175,10 @@ namespace DialogueNodeEditor
             _currentAssetPath = AssetDatabase.GetAssetPath(container);
             UpdatePathLabel();
 
-            // 自動復元時以外はパスを保存
-            if (!autoRestore && !string.IsNullOrEmpty(_currentAssetPath))
-            {
-                EditorPrefs.SetString(LastOpenedContainerKey, _currentAssetPath);
-            }
-
             var saveUtility = GraphSaveUtility.GetInstance(_graphView);
             saveUtility.LoadGraph(container);
+            // タイトルも更新
+            titleContent = new GUIContent(System.IO.Path.GetFileName(_currentAssetPath));
         }
 
         private void UpdatePathLabel()

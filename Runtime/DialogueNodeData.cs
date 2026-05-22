@@ -32,6 +32,7 @@ namespace DialogueNodeEditor
         
         public string PortraitNodeGUID;
         public string StillNodeGUID;
+        public int LinkInputCount = 1;
 
         public bool ShowSettings;
         public bool OverrideTypingSpeed;

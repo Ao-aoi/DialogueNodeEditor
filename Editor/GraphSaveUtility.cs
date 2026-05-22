@@ -43,10 +43,18 @@ namespace DialogueNodeEditor
             foreach (var edge in connectedPorts)
             {
                 var outputNode = edge.output.node as BaseGraphNode; var inputNode = edge.input.node as BaseGraphNode;
+                var targetPortIndex = -1;
+                if (inputNode is DialogueNode dialogueTarget)
+                {
+                    var dynamicPorts = dialogueTarget.DynamicInputPorts.ToList();
+                    targetPortIndex = dynamicPorts.IndexOf(edge.input);
+                }
+
                 dialogueContainer.NodeLinks.Add(new NodeLinkData {
                     BaseNodeGuid = outputNode.GUID,
                     PortName = edge.output.portName,
                     TargetPortName = edge.input.portName,
+                    TargetPortIndex = targetPortIndex,
                     TargetNodeGuid = inputNode.GUID
                 });
             }
@@ -101,6 +109,7 @@ namespace DialogueNodeEditor
                         Choices = choices,
                         PortraitNodeGUID = portraitGuid,
                         StillNodeGUID = stillGuid,
+                        LinkInputCount = dialogueNode.DynamicInputPorts.Count,
                         ShowSettings = dialogueNode.ShowSettings,
                         OverrideTypingSpeed = dialogueNode.OverrideTypingSpeed,
                         TypingSpeedValue = dialogueNode.TypingSpeedField.value,
@@ -234,6 +243,12 @@ namespace DialogueNodeEditor
             {
                 var tempNode = _targetGraphView.CreateDialogueNode(nodeData.SpeakerName, nodeData.DialogueText, nodeData.Position);
                 tempNode.GUID = nodeData.NodeGUID;
+
+                var desiredLinkInputCount = Mathf.Max(1, nodeData.LinkInputCount);
+                while (tempNode.DynamicInputPorts.Count < desiredLinkInputCount)
+                {
+                    tempNode.CreateNewDynamicInputPort();
+                }
                 
                 if (nodeData.Choices != null)
                 {
@@ -288,6 +303,8 @@ namespace DialogueNodeEditor
 
         private void ConnectNodes(DialogueContainer container)
         {
+            var fallbackTargetIndices = new Dictionary<string, int>();
+
             for (var i = 0; i < Nodes.Count; i++)
             {
                 var connections = container.NodeLinks.Where(x => x.BaseNodeGuid == Nodes[i].GUID).ToList();
@@ -301,7 +318,31 @@ namespace DialogueNodeEditor
                     if (outputPort != null)
                     {
                         Port inputPort = null;
-                        if (!string.IsNullOrEmpty(connections[j].TargetPortName))
+                        var isDynamicLinkInput = targetNode is DialogueNode &&
+                                                 (connections[j].TargetPortIndex >= 0 || connections[j].TargetPortName == "Link Input");
+
+                        if (isDynamicLinkInput && targetNode is DialogueNode dialogueTarget)
+                        {
+                            var targetIndex = connections[j].TargetPortIndex;
+                            if (targetIndex < 0)
+                            {
+                                if (!fallbackTargetIndices.TryGetValue(dialogueTarget.GUID, out targetIndex))
+                                {
+                                    targetIndex = 0;
+                                }
+
+                                fallbackTargetIndices[dialogueTarget.GUID] = targetIndex + 1;
+                            }
+
+                            while (dialogueTarget.DynamicInputPorts.Count <= targetIndex)
+                            {
+                                dialogueTarget.CreateNewDynamicInputPort();
+                            }
+
+                            inputPort = dialogueTarget.DynamicInputPorts.ElementAtOrDefault(targetIndex);
+                        }
+
+                        if (inputPort == null && !string.IsNullOrEmpty(connections[j].TargetPortName))
                         {
                             inputPort = targetNode.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == connections[j].TargetPortName);
                         }

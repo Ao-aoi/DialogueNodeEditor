@@ -6,6 +6,9 @@ namespace DialogueNodeEditor
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "DialogueEditor/Dialogue Container")]
     public class DialogueContainer : ScriptableObject
     {
+        [Tooltip("文字表示完了後に次ページへ進むまでの待機時間（秒）")]
+        public float AdvanceDelay = 2.0f;
+
         public List<NodeLinkData> NodeLinks = new List<NodeLinkData>();
         public List<DialogueNodeData> DialogueNodeData = new List<DialogueNodeData>();
         

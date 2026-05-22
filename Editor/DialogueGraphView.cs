@@ -11,6 +11,7 @@ namespace DialogueNodeEditor
     {
         public Blackboard Blackboard;
         public List<ExposedProperty> ExposedProperties = new List<ExposedProperty>();
+        public DialogueGraphWindow EditorWindow { get; }
 
         public void ClearBlackBoardAndData()
         {
@@ -50,6 +51,7 @@ namespace DialogueNodeEditor
 
         public DialogueGraphView(DialogueGraphWindow editorWindow)
         {
+            EditorWindow = editorWindow;
             SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
 
             Insert(0, new GridBackground());

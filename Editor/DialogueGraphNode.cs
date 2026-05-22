@@ -144,6 +144,8 @@ namespace DialogueNodeEditor{
         public bool CanSkipTyping = true;
         public Toggle CanSkipTypingToggle;
 
+        public FloatField AdvanceDelayField;
+
         public DialogueNode()
         {
             title = "Dialogue Node";
@@ -204,6 +206,7 @@ namespace DialogueNodeEditor{
             titleButtonContainer.Add(addChoiceBtn);
             
             CreateSettingsUI();
+            RegisterCallback<AttachToPanelEvent>(_ => SyncAdvanceDelayField());
             RefreshExpandedState(); RefreshPorts();
         }
 
@@ -239,6 +242,21 @@ namespace DialogueNodeEditor{
             CanSkipTypingToggle.RegisterValueChangedCallback(evt => CanSkipTyping = evt.newValue);
             _settingsContainer.Add(CanSkipTypingToggle);
 
+            AdvanceDelayField = new FloatField("Advance Delay (s)")
+            {
+                value = 2.0f
+            };
+            AdvanceDelayField.RegisterValueChangedCallback(evt =>
+            {
+                var currentContainer = GetCurrentContainer();
+                if (currentContainer != null)
+                {
+                    currentContainer.AdvanceDelay = evt.newValue;
+                    UnityEditor.EditorUtility.SetDirty(currentContainer);
+                }
+            });
+            _settingsContainer.Add(AdvanceDelayField);
+
             var speedRow = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
             
             TypingSpeedToggle = new Toggle("Type Speed");
@@ -260,6 +278,21 @@ namespace DialogueNodeEditor{
             _settingsContainer.Add(speedRow);
             
             extensionContainer.Add(_settingsContainer);
+        }
+
+        private DialogueContainer GetCurrentContainer()
+        {
+            var graphView = this.GetFirstAncestorOfType<DialogueGraphView>();
+            return graphView?.EditorWindow?.CurrentContainer;
+        }
+
+        private void SyncAdvanceDelayField()
+        {
+            var currentContainer = GetCurrentContainer();
+            if (currentContainer != null && AdvanceDelayField != null)
+            {
+                AdvanceDelayField.SetValueWithoutNotify(currentContainer.AdvanceDelay);
+            }
         }
         
         /// <summary>

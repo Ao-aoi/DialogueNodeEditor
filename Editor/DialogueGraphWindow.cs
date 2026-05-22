@@ -13,6 +13,8 @@ namespace DialogueNodeEditor
         [SerializeField] private string _currentAssetPath = "";
         private Label _pathLabel;
 
+        public DialogueContainer CurrentContainer { get; private set; }
+
         private const string LastOpenedContainerKey = "DialogueNodeEditor.LastOpenedContainerPath";
 
         [MenuItem("Window/Dialogue Node Editor")]
@@ -172,6 +174,7 @@ namespace DialogueNodeEditor
         {
             if (_graphView == null) return;
 
+            CurrentContainer = container;
             _currentAssetPath = AssetDatabase.GetAssetPath(container);
             UpdatePathLabel();
 

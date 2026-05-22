@@ -125,6 +125,8 @@ namespace DialogueNodeEditor{
         public string DialogueText;
         public string SpeakerName;
         public string Expression;
+        private static bool s_ShowSettings;
+        private static readonly HashSet<DialogueNode> s_LiveNodes = new HashSet<DialogueNode>();
 
         private List<Port> _dynamicInputPorts = new List<Port>();
         public IReadOnlyList<Port> DynamicInputPorts => _dynamicInputPorts;
@@ -133,7 +135,11 @@ namespace DialogueNodeEditor{
         private DropdownField _expressionDropdown;
         public DropdownField CharacterDropdown;
 
-        public bool ShowSettings = false;
+        public bool ShowSettings
+        {
+            get => s_ShowSettings;
+            set => SetShowSettings(value);
+        }
         public bool OverrideTypingSpeed = false;
         private VisualElement _settingsContainer;
         public Toggle TypingSpeedToggle;
@@ -143,6 +149,9 @@ namespace DialogueNodeEditor{
 
         public bool CanSkipTyping = true;
         public Toggle CanSkipTypingToggle;
+
+        public bool AutoAdvance = false;
+        public Toggle AutoAdvanceToggle;
 
         public FloatField AdvanceDelayField;
 
@@ -206,7 +215,16 @@ namespace DialogueNodeEditor{
             titleButtonContainer.Add(addChoiceBtn);
             
             CreateSettingsUI();
-            RegisterCallback<AttachToPanelEvent>(_ => SyncAdvanceDelayField());
+            UpdateSettingsUI();
+            RegisterCallback<AttachToPanelEvent>(_ => {
+                s_LiveNodes.Add(this);
+                UpdateSettingsUI();
+            });
+            RegisterCallback<DetachFromPanelEvent>(_ => s_LiveNodes.Remove(this));
+            RegisterCallback<AttachToPanelEvent>(_ => {
+                SyncAdvanceDelayField();
+                SyncAutoAdvanceField();
+            });
             RefreshExpandedState(); RefreshPorts();
         }
 
@@ -241,6 +259,10 @@ namespace DialogueNodeEditor{
             CanSkipTypingToggle = new Toggle("Can Skip Typing") { value = CanSkipTyping };
             CanSkipTypingToggle.RegisterValueChangedCallback(evt => CanSkipTyping = evt.newValue);
             _settingsContainer.Add(CanSkipTypingToggle);
+
+            AutoAdvanceToggle = new Toggle("Auto Advance") { value = AutoAdvance };
+            AutoAdvanceToggle.RegisterValueChangedCallback(evt => AutoAdvance = evt.newValue);
+            _settingsContainer.Add(AutoAdvanceToggle);
 
             AdvanceDelayField = new FloatField("Advance Delay (s)")
             {
@@ -279,6 +301,21 @@ namespace DialogueNodeEditor{
             
             extensionContainer.Add(_settingsContainer);
         }
+        
+        private void SetShowSettings(bool showSettings)
+        {
+            s_ShowSettings = showSettings;
+
+            UpdateSettingsUI();
+
+            foreach (var node in s_LiveNodes.ToList())
+            {
+                if (node != null)
+                {
+                    node.UpdateSettingsUI();
+                }
+            }
+        }
 
         private DialogueContainer GetCurrentContainer()
         {
@@ -292,6 +329,14 @@ namespace DialogueNodeEditor{
             if (currentContainer != null && AdvanceDelayField != null)
             {
                 AdvanceDelayField.SetValueWithoutNotify(currentContainer.AdvanceDelay);
+            }
+        }
+
+        private void SyncAutoAdvanceField()
+        {
+            if (AutoAdvanceToggle != null)
+            {
+                AutoAdvanceToggle.SetValueWithoutNotify(AutoAdvance);
             }
         }
         

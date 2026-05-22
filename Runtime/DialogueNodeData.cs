@@ -39,6 +39,7 @@ namespace DialogueNodeEditor
         public float TypingSpeedValue;
         public string TypingSpeedNodeGUID;
         public bool CanSkipTyping = true;
+        public bool AutoAdvance;
     }
 
     [Serializable]

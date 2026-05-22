@@ -94,7 +94,8 @@ namespace DialogueNodeEditor
                     copyData.DialogueNodes.Add(new DialogueNodeData {
                         SpeakerName = dNode.SpeakerName, DialogueText = dNode.DialogueText, Expression = dNode.Expression,
                         Position = dNode.GetPosition().position, Choices = choices, ShowSettings = dNode.ShowSettings,
-                        OverrideTypingSpeed = dNode.OverrideTypingSpeed, TypingSpeedValue = dNode.TypingSpeedValue, CanSkipTyping = dNode.CanSkipTyping
+                        OverrideTypingSpeed = dNode.OverrideTypingSpeed, TypingSpeedValue = dNode.TypingSpeedValue, CanSkipTyping = dNode.CanSkipTyping,
+                        AutoAdvance = dNode.AutoAdvance
                     });
                 }
                 else if (element is CharacterNode cNode)
@@ -145,6 +146,7 @@ namespace DialogueNodeEditor
                 node.Expression = d.Expression;
                 node.ShowSettings = d.ShowSettings; node.OverrideTypingSpeed = d.OverrideTypingSpeed;
                 node.TypingSpeedValue = d.TypingSpeedValue; node.CanSkipTyping = d.CanSkipTyping;
+                node.AutoAdvance = d.AutoAdvance;
                 if(d.Choices != null) foreach(var c in d.Choices) node.AddChoicePort(c);
                 node.UpdateSettingsUI();
                 node.GUID = System.Guid.NewGuid().ToString();

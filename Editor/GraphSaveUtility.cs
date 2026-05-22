@@ -114,7 +114,8 @@ namespace DialogueNodeEditor
                         OverrideTypingSpeed = dialogueNode.OverrideTypingSpeed,
                         TypingSpeedValue = dialogueNode.TypingSpeedField.value,
                         TypingSpeedNodeGUID = floatGuid,
-                        CanSkipTyping = dialogueNode.CanSkipTyping
+                        CanSkipTyping = dialogueNode.CanSkipTyping,
+                        AutoAdvance = dialogueNode.AutoAdvance
                     });
                 }
                 else if (baseNode is CharacterNode characterNode)
@@ -215,6 +216,9 @@ namespace DialogueNodeEditor
                     
                     node.CanSkipTyping = data.CanSkipTyping;
                     node.CanSkipTypingToggle.SetValueWithoutNotify(data.CanSkipTyping);
+
+                    node.AutoAdvance = data.AutoAdvance;
+                    node.AutoAdvanceToggle.SetValueWithoutNotify(data.AutoAdvance);
                     
                     node.TypingSpeedInputPort.style.display = data.OverrideTypingSpeed ? DisplayStyle.Flex : DisplayStyle.None;
                     node.UpdateSettingsUI();

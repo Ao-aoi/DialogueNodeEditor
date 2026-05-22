@@ -110,9 +110,9 @@ namespace DialogueNodeEditor
                 {
                     copyData.StillNodes.Add(new StillNodeData { StillImage = sNode.StillImage, ShouldScrollStill = sNode.ShouldScrollStill, ScrollAmount = sNode.ScrollAmount, ScrollSpeed = sNode.ScrollSpeed, Position = sNode.GetPosition().position });
                 }
-                else if (element is PanelSizeNode psNode)
+                else if (element is PanelSettingNode psNode)
                 {
-                    copyData.PanelSizeNodes.Add(new PanelSizeNodeData { PanelWidth = psNode.PanelWidth, Position = psNode.GetPosition().position });
+                    copyData.PanelSizeNodes.Add(new PanelSettingNodeData { PanelWidth = psNode.PanelWidth, PanelHeight = psNode.PanelHeight, PanelSprite = psNode.PanelSprite, Position = psNode.GetPosition().position });
                 }
                 else if (element is PropertyNode propNode)
                 {
@@ -165,8 +165,8 @@ namespace DialogueNodeEditor
             }
             foreach(var ps in copyData.PanelSizeNodes)
             {
-                var node = new PanelSizeNode(); node.SetPosition(new Rect(ps.Position + offset, new Vector2(200, 150))); 
-                node.LoadData(ps.PanelWidth); node.GUID = System.Guid.NewGuid().ToString(); AddElement(node); AddToSelection(node);
+                var node = new PanelSettingNode(); node.SetPosition(new Rect(ps.Position + offset, new Vector2(200, 150))); 
+                node.LoadData(ps.PanelWidth, ps.PanelHeight, ps.PanelSprite); node.GUID = System.Guid.NewGuid().ToString(); AddElement(node); AddToSelection(node);
             }
             foreach(var prop in copyData.PropertyNodes)
             {
@@ -177,39 +177,53 @@ namespace DialogueNodeEditor
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
-            // --- 既存のEdge（線）の接続処理 ---
+            // --- Edge（線）が接続されたとき ---
             if (graphViewChange.edgesToCreate != null)
             {
                 foreach (var edge in graphViewChange.edgesToCreate)
                 {
-                    if (edge.input.node is DialogueNode dNode && edge.output.node is CharacterNode)
+                    // 接続先が DialogueNode の場合
+                    if (edge.input.node is DialogueNode dNode)
                     {
-                        dNode.schedule.Execute(() => dNode.UpdateCharacterState()).StartingIn(10);
+                        // 動的ポートの増減チェックを走らせる（少し遅らせて実行）
+                        dNode.schedule.Execute(() => {
+                            dNode.UpdateDynamicPorts();
+                            dNode.UpdateCharacterState();
+                        }).StartingIn(10);
                     }
                 }
             }
 
+            // --- 要素（EdgeやNode）が削除されたとき ---
             if (graphViewChange.elementsToRemove != null)
             {
-                bool needsDropdownUpdate = false; // ★追加: キャラクターノードが消えたかチェック用フラグ
+                bool needsDropdownUpdate = false;
+                List<DialogueNode> affectedNodes = new List<DialogueNode>();
 
                 foreach (var elem in graphViewChange.elementsToRemove)
                 {
                     if (elem is Edge edge)
                     {
-                        if (edge.input.node is DialogueNode dNode && edge.output.node is CharacterNode)
+                        if (edge.input != null && edge.input.node is DialogueNode dNode)
                         {
-                            dNode.schedule.Execute(() => dNode.UpdateCharacterState()).StartingIn(10);
+                            if (!affectedNodes.Contains(dNode)) affectedNodes.Add(dNode);
                         }
                     }
-                    // ★追加: CharacterNodeが削除された場合
                     else if (elem is CharacterNode)
                     {
                         needsDropdownUpdate = true;
                     }
                 }
 
-                // ★追加: 削除後に少し遅らせて全ダイアログノードのドロップダウンを更新する
+                // 線が外されたノードに対して動的ポートの削減処理を走らせる
+                foreach (var dNode in affectedNodes)
+                {
+                    dNode.schedule.Execute(() => {
+                        dNode.UpdateDynamicPorts();
+                        dNode.UpdateCharacterState();
+                    }).StartingIn(10);
+                }
+
                 if (needsDropdownUpdate)
                 {
                     this.schedule.Execute(() => RefreshAllDialogueNodesDropdowns()).StartingIn(50);
@@ -236,9 +250,27 @@ namespace DialogueNodeEditor
             {
                 if (startPort != port && startPort.node != port.node && startPort.direction != port.direction)
                 {
-                    if (startPort.portType == port.portType)
+                    // FlowPort 同士の接続はそのまま許可
+                    if (startPort.portType == typeof(FlowPort) && port.portType == typeof(FlowPort))
                     {
                         compatiblePorts.Add(port);
+                    }
+                    // DynamicInputPort (typeof(object)) に対する接続制限
+                    else if (startPort.direction == Direction.Output && port.portType == typeof(object))
+                    {
+                        // 出力側が FlowPort 以外（設定系ノード）なら汎用インプットに繋げてOK
+                        if (startPort.portType != typeof(FlowPort))
+                        {
+                            compatiblePorts.Add(port);
+                        }
+                    }
+                    else if (startPort.direction == Direction.Input && startPort.portType == typeof(object))
+                    {
+                        // 入力側が汎用インプットの場合、相手のOutputがFlowPort以外なら繋げてOK
+                        if (port.direction == Direction.Output && port.portType != typeof(FlowPort))
+                        {
+                            compatiblePorts.Add(port);
+                        }
                     }
                 }
             });
@@ -269,7 +301,7 @@ namespace DialogueNodeEditor
             evt.menu.AppendAction("Add End Node", action => CreateNode(new EndNode(), mousePosition));
             evt.menu.AppendAction("Add Setting/Portrait", action => CreateNode(new PortraitNode(), mousePosition));
             evt.menu.AppendAction("Add Setting/Still", action => CreateNode(new StillNode(), mousePosition));
-            evt.menu.AppendAction("Add Setting/Panel Size", action => CreateNode(new PanelSizeNode(), mousePosition));
+            evt.menu.AppendAction("Add Setting/Panel", action => CreateNode(new PanelSettingNode(), mousePosition));
         }
 
         public DialogueNode CreateDialogueNode(string speakerName, string text, Vector2 position)

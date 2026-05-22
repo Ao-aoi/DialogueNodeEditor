@@ -76,9 +76,11 @@ namespace DialogueNodeEditor
     }
 
     [Serializable]
-    public class PanelSizeNodeData
-    {   
+    public class PanelSettingNodeData
+    {
         public float PanelWidth;
+        public float PanelHeight;
+        public Sprite PanelSprite;
         public string NodeGUID;
         public Vector2 Position;
     }
@@ -105,7 +107,7 @@ namespace DialogueNodeEditor
         public List<CharacterNodeData> CharacterNodes = new List<CharacterNodeData>();
         public List<PortraitNodeData> PortraitNodes = new List<PortraitNodeData>();
         public List<StillNodeData> StillNodes = new List<StillNodeData>();
-        public List<PanelSizeNodeData> PanelSizeNodes = new List<PanelSizeNodeData>();
+        public List<PanelSettingNodeData> PanelSizeNodes = new List<PanelSettingNodeData>();
         public List<PropertyNodeData> PropertyNodes = new List<PropertyNodeData>();
     }
 }

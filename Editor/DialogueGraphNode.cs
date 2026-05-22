@@ -9,7 +9,7 @@ namespace DialogueNodeEditor{
     public class FlowPort {}
     public class PortraitPort {}
     public class StillPort {}
-    public class PanelSizePort {}
+    public class PanelSettingPort {}
     public class CharacterPort {}
     public class FloatPort {}
     
@@ -126,9 +126,8 @@ namespace DialogueNodeEditor{
         public string SpeakerName;
         public string Expression;
 
-        public Port CharacterInputPort;
-        public Port PortraitInputPort;
-        public Port StillInputPort;
+        private List<Port> _dynamicInputPorts = new List<Port>();
+        public IReadOnlyList<Port> DynamicInputPorts => _dynamicInputPorts;
 
         private TextField _speakerNameField;
         private DropdownField _expressionDropdown;
@@ -188,22 +187,15 @@ namespace DialogueNodeEditor{
             textField.RegisterValueChangedCallback(evt => DialogueText = evt.newValue);
             mainContainer.Add(textField);
 
+            // Flow（会話の流れ）用ポート
             var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(FlowPort));
             inputPort.portName = "Input (Flow)";
             inputContainer.Add(inputPort);
 
-            CharacterInputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(CharacterPort));
-            CharacterInputPort.portName = "Character";
-            inputContainer.Add(CharacterInputPort);
+            // 汎用ポート
+            CreateNewDynamicInputPort();
 
-            PortraitInputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(PortraitPort));
-            PortraitInputPort.portName = "Portrait";
-            inputContainer.Add(PortraitInputPort);
-
-            StillInputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(StillPort));
-            StillInputPort.portName = "Still";
-            inputContainer.Add(StillInputPort);
-
+            // Output ポート
             var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(FlowPort));
             outputPort.portName = "Next";
             outputContainer.Add(outputPort);
@@ -213,6 +205,23 @@ namespace DialogueNodeEditor{
             
             CreateSettingsUI();
             RefreshExpandedState(); RefreshPorts();
+        }
+
+        /// <summary>
+        /// 汎用的なポートを1つ追加するメソッド
+        /// </summary>
+        public void CreateNewDynamicInputPort()
+        {
+            // ポートタイプを共通化するために typeof(object) にするか、
+            // 互換性チェック（GetCompatiblePorts）側で制御する
+            var dynamicPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(object));
+            dynamicPort.portName = "Link Input";
+            
+            inputContainer.Add(dynamicPort);
+            _dynamicInputPorts.Add(dynamicPort);
+            
+            RefreshExpandedState();
+            RefreshPorts();
         }
 
         private void CreateSettingsUI()
@@ -252,6 +261,35 @@ namespace DialogueNodeEditor{
             
             extensionContainer.Add(_settingsContainer);
         }
+        
+        /// <summary>
+        /// ポートの接続状態をチェックし、増減を制御するメソッド（GraphView側から呼ばれる）
+        /// </summary>
+        public void UpdateDynamicPorts()
+        {
+            // 1. 接続されているポートと、未接続のポートを整理する
+            var connectedPorts = _dynamicInputPorts.Where(p => p.connected).ToList();
+            var unconnectedPorts = _dynamicInputPorts.Where(p => !p.connected).ToList();
+
+            // 2. 未接続のポートが1つもない場合は、新しく1つ追加する
+            if (unconnectedPorts.Count == 0)
+            {
+                CreateNewDynamicInputPort();
+            }
+            // 3. 未接続のポートが2つ以上存在する場合は、最後の1つを残して削除する（ゴミ掃除）
+            else if (unconnectedPorts.Count > 1)
+            {
+                // 最後の1つ以外を削除対象にする
+                for (int i = 0; i < unconnectedPorts.Count - 1; i++)
+                {
+                    var portToRemove = unconnectedPorts[i];
+                    inputContainer.Remove(portToRemove);
+                    _dynamicInputPorts.Remove(portToRemove);
+                }
+                RefreshExpandedState();
+                RefreshPorts();
+            }
+        }
 
         public void UpdateCharacterState()
         {
@@ -265,8 +303,19 @@ namespace DialogueNodeEditor{
 
             if (!charNames.Contains(CharacterDropdown.value)) CharacterDropdown.SetValueWithoutNotify("None (Custom)");
 
-            var edges = CharacterInputPort.connections.ToList();
-            if (edges.Count > 0 && edges[0].output.node is CharacterNode connectedCharNode)
+            // ★固定ポートではなく、動的ポートのリストから CharacterNode が繋がっているか探す
+            CharacterNode connectedCharNode = null;
+            foreach (var port in _dynamicInputPorts)
+            {
+                var connectedEdge = port.connections.FirstOrDefault();
+                if (connectedEdge != null && connectedEdge.output.node is CharacterNode cNode)
+                {
+                    connectedCharNode = cNode;
+                    break;
+                }
+            }
+
+            if (connectedCharNode != null)
             {
                 CharacterDropdown.style.display = DisplayStyle.None;
                 _speakerNameField.style.display = DisplayStyle.None;
@@ -470,21 +519,43 @@ namespace DialogueNodeEditor{
         }
     }
 
-    public class PanelSizeNode : BaseGraphNode
+    public class PanelSettingNode : BaseGraphNode
     {
         public float PanelWidth = 230f;
-        public PanelSizeNode()
+        public float PanelHeight = 150f;
+        public Sprite PanelSprite;
+
+        public PanelSettingNode()
         {
-            title = "Panel Size Setting";
-            var panelWidthField = new FloatField("Panel Width") { value = PanelWidth };
-            panelWidthField.RegisterValueChangedCallback(evt => PanelWidth = evt.newValue); mainContainer.Add(panelWidthField);
-            var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(PanelSizePort));
+            title = "Panel Setting";
+            var widthField = new FloatField("Panel Width") { value = PanelWidth };
+            widthField.RegisterValueChangedCallback(evt => PanelWidth = evt.newValue);
+            mainContainer.Add(widthField);
+
+            var heightField = new FloatField("Panel Height") { value = PanelHeight };
+            heightField.RegisterValueChangedCallback(evt => PanelHeight = evt.newValue);
+            mainContainer.Add(heightField);
+
+            var spriteField = new ObjectField("Sprite") { objectType = typeof(Sprite), value = PanelSprite };
+            spriteField.RegisterValueChangedCallback(evt => PanelSprite = evt.newValue as Sprite);
+            mainContainer.Add(spriteField);
+
+            var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(PanelSettingPort));
             outputPort.portName = "Output"; outputContainer.Add(outputPort);
             RefreshExpandedState(); RefreshPorts();
         }
-        public void LoadData(float width)
+
+        public void LoadData(float width, float height, Sprite sprite)
         {
-            PanelWidth = width; mainContainer.Query<FloatField>().First().SetValueWithoutNotify(width);
+            PanelWidth = width; PanelHeight = height; PanelSprite = sprite;
+            var floatFields = mainContainer.Query<FloatField>().ToList();
+            if (floatFields.Count >= 2)
+            {
+                floatFields[0].SetValueWithoutNotify(width);
+                floatFields[1].SetValueWithoutNotify(height);
+            }
+            var objFields = mainContainer.Query<ObjectField>().ToList();
+            if (objFields.Count > 0) objFields[0].SetValueWithoutNotify(sprite);
         }
     }
 

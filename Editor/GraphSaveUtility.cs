@@ -44,7 +44,10 @@ namespace DialogueNodeEditor
             {
                 var outputNode = edge.output.node as BaseGraphNode; var inputNode = edge.input.node as BaseGraphNode;
                 dialogueContainer.NodeLinks.Add(new NodeLinkData {
-                    BaseNodeGuid = outputNode.GUID, PortName = edge.output.portName, TargetNodeGuid = inputNode.GUID
+                    BaseNodeGuid = outputNode.GUID,
+                    PortName = edge.output.portName,
+                    TargetPortName = edge.input.portName,
+                    TargetNodeGuid = inputNode.GUID
                 });
             }
 
@@ -61,17 +64,25 @@ namespace DialogueNodeEditor
                     }
 
                     string portraitGuid = "";
-                    var portraitEdges = dialogueNode.PortraitInputPort.connections.ToList();
-                    if (portraitEdges.Count > 0 && portraitEdges[0].output.node is PortraitNode pNode)
-                    {
-                        portraitGuid = pNode.GUID;
-                    }
-
                     string stillGuid = "";
-                    var stillEdges = dialogueNode.StillInputPort.connections.ToList();
-                    if (stillEdges.Count > 0 && stillEdges[0].output.node is StillNode sNode)
+
+                    // 汎用ポートのリストから、つながっているノードの型をチェックしてGUIDを抽出する
+                    // (DialogueNode.cs で _dynamicInputPorts を public にするか、
+                    //  プロパティ経由でアクセスできるようにしてください。後述します)
+                    foreach (var port in dialogueNode.DynamicInputPorts)
                     {
-                        stillGuid = sNode.GUID;
+                        var edge = port.connections.FirstOrDefault();
+                        if (edge != null && edge.output != null)
+                        {
+                            if (edge.output.node is PortraitNode pNode)
+                            {
+                                portraitGuid = pNode.GUID;
+                            }
+                            else if (edge.output.node is StillNode sNode)
+                            {
+                                stillGuid = sNode.GUID;
+                            }
+                        }
                     }
 
                     string floatGuid = "";
@@ -113,9 +124,9 @@ namespace DialogueNodeEditor
                 {
                     dialogueContainer.StillNodeData.Add(new StillNodeData { NodeGUID = stillNode.GUID, StillImage = stillNode.StillImage, ShouldScrollStill = stillNode.ShouldScrollStill, ScrollAmount = stillNode.ScrollAmount, ScrollSpeed = stillNode.ScrollSpeed, Position = stillNode.GetPosition().position });
                 }
-                else if (baseNode is PanelSizeNode panelSizeNode)
+                else if (baseNode is PanelSettingNode panelSizeNode)
                 {
-                    dialogueContainer.PanelSizeNodeData.Add(new PanelSizeNodeData { NodeGUID = panelSizeNode.GUID, PanelWidth = panelSizeNode.PanelWidth, Position = panelSizeNode.GetPosition().position });
+                    dialogueContainer.PanelSizeNodeData.Add(new PanelSettingNodeData { NodeGUID = panelSizeNode.GUID, PanelWidth = panelSizeNode.PanelWidth, PanelHeight = panelSizeNode.PanelHeight, PanelSprite = panelSizeNode.PanelSprite, Position = panelSizeNode.GetPosition().position });
                 }
                 else if (baseNode is EndNode endNode)
                 {
@@ -251,8 +262,8 @@ namespace DialogueNodeEditor
             }
             foreach (var data in container.PanelSizeNodeData)
             {
-                var tempNode = new PanelSizeNode(); tempNode.SetPosition(new Rect(data.Position, new Vector2(200, 150)));
-                tempNode.LoadData(data.PanelWidth); tempNode.GUID = data.NodeGUID; _targetGraphView.AddElement(tempNode);
+                var tempNode = new PanelSettingNode(); tempNode.SetPosition(new Rect(data.Position, new Vector2(200, 150)));
+                tempNode.LoadData(data.PanelWidth, data.PanelHeight, data.PanelSprite); tempNode.GUID = data.NodeGUID; _targetGraphView.AddElement(tempNode);
             }
             foreach (var data in container.EndNodeData)
             {
@@ -289,7 +300,15 @@ namespace DialogueNodeEditor
                     var outputPort = Nodes[i].outputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == connections[j].PortName);
                     if (outputPort != null)
                     {
-                        var inputPort = targetNode.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == outputPort.portType);
+                        Port inputPort = null;
+                        if (!string.IsNullOrEmpty(connections[j].TargetPortName))
+                        {
+                            inputPort = targetNode.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == connections[j].TargetPortName);
+                        }
+                        if (inputPort == null)
+                        {
+                            inputPort = targetNode.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portType == outputPort.portType);
+                        }
                         if (inputPort != null) LinkNodes(outputPort, inputPort);
                     }
                 }

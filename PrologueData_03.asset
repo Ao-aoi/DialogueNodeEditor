@@ -1,0 +1,1095 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d21f8b32fd5f642ba8ae73e92fe043, type: 3}
+  m_Name: PrologueData_03
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - PortName: Output
+    BaseNodeGuid: 08ded633-fd57-4287-bb42-46c24e16a6d1
+    TargetNodeGuid: 5c4306c4-f2ca-4fcf-874f-37df1ba146c5
+  - PortName: Next
+    BaseNodeGuid: 5c4306c4-f2ca-4fcf-874f-37df1ba146c5
+    TargetNodeGuid: 2dc3d301-6b34-4479-ad5e-029a14b67704
+  - PortName: Next
+    BaseNodeGuid: 2dc3d301-6b34-4479-ad5e-029a14b67704
+    TargetNodeGuid: cb947106-26c2-4cfd-8b43-976e5c984c0f
+  - PortName: Next
+    BaseNodeGuid: cb947106-26c2-4cfd-8b43-976e5c984c0f
+    TargetNodeGuid: 27b36e05-a363-4ba2-b4bc-2155ea00c7dd
+  - PortName: Next
+    BaseNodeGuid: 27b36e05-a363-4ba2-b4bc-2155ea00c7dd
+    TargetNodeGuid: 83ead413-3182-40ba-a18f-5b7fc4009d41
+  - PortName: Next
+    BaseNodeGuid: 83ead413-3182-40ba-a18f-5b7fc4009d41
+    TargetNodeGuid: e5a5ce60-8469-45ae-9954-349d52f9d4b0
+  - PortName: Next
+    BaseNodeGuid: e5a5ce60-8469-45ae-9954-349d52f9d4b0
+    TargetNodeGuid: cd774676-91a5-4a34-8664-52f4007a06e6
+  - PortName: Next
+    BaseNodeGuid: cd774676-91a5-4a34-8664-52f4007a06e6
+    TargetNodeGuid: 0ddf421c-874c-481c-baa8-99b556b28068
+  - PortName: Next
+    BaseNodeGuid: 0ddf421c-874c-481c-baa8-99b556b28068
+    TargetNodeGuid: 0dc196de-224f-4757-8a05-d2e9bfc18b5c
+  - PortName: Output
+    BaseNodeGuid: f4fca97f-0579-45e1-9819-e64dee29395c
+    TargetNodeGuid: 0dc196de-224f-4757-8a05-d2e9bfc18b5c
+  - PortName: Next
+    BaseNodeGuid: 0dc196de-224f-4757-8a05-d2e9bfc18b5c
+    TargetNodeGuid: 573fb7b4-7b55-4e03-a7c0-ce99fb53efb9
+  - PortName: Next
+    BaseNodeGuid: 573fb7b4-7b55-4e03-a7c0-ce99fb53efb9
+    TargetNodeGuid: be642c19-ebea-48df-923c-8619aeeac98e
+  - PortName: Next
+    BaseNodeGuid: be642c19-ebea-48df-923c-8619aeeac98e
+    TargetNodeGuid: 0f8c35e0-b3ec-487c-af46-56b1c91f54fb
+  - PortName: Next
+    BaseNodeGuid: 0f8c35e0-b3ec-487c-af46-56b1c91f54fb
+    TargetNodeGuid: ed272c48-ea16-4c2d-a202-9746fe8381f4
+  - PortName: Next
+    BaseNodeGuid: ed272c48-ea16-4c2d-a202-9746fe8381f4
+    TargetNodeGuid: 405222e8-9a71-4993-bbc4-d1bff5ad4343
+  - PortName: Next
+    BaseNodeGuid: 405222e8-9a71-4993-bbc4-d1bff5ad4343
+    TargetNodeGuid: 67485fa6-6eb6-45e6-8719-3b06eceb59a0
+  - PortName: Next
+    BaseNodeGuid: 67485fa6-6eb6-45e6-8719-3b06eceb59a0
+    TargetNodeGuid: 8c0df1b6-975c-4152-80d3-5576d9cd7825
+  - PortName: Next
+    BaseNodeGuid: 8c0df1b6-975c-4152-80d3-5576d9cd7825
+    TargetNodeGuid: 987b5479-848d-4fdc-9199-f9c02638b8aa
+  - PortName: Next
+    BaseNodeGuid: 987b5479-848d-4fdc-9199-f9c02638b8aa
+    TargetNodeGuid: 9a311cf7-0a06-4446-a31e-533014b3ec7f
+  - PortName: Next
+    BaseNodeGuid: 9a311cf7-0a06-4446-a31e-533014b3ec7f
+    TargetNodeGuid: 4a6671c7-0563-4956-a3d4-8efc1ed58e9c
+  - PortName: Next
+    BaseNodeGuid: 4a6671c7-0563-4956-a3d4-8efc1ed58e9c
+    TargetNodeGuid: b8b28301-e985-40e5-8017-c31cf61e5284
+  - PortName: Next
+    BaseNodeGuid: b8b28301-e985-40e5-8017-c31cf61e5284
+    TargetNodeGuid: d0ab3ed2-efb2-411b-b94e-4cae8d4a8e95
+  - PortName: Next
+    BaseNodeGuid: d0ab3ed2-efb2-411b-b94e-4cae8d4a8e95
+    TargetNodeGuid: ca4cb0e9-a88e-4eb8-a20c-cc8fd0bdf1fb
+  - PortName: Next
+    BaseNodeGuid: ca4cb0e9-a88e-4eb8-a20c-cc8fd0bdf1fb
+    TargetNodeGuid: 4ac96c6b-9080-43d7-a809-1d0591ffdaa0
+  - PortName: Next
+    BaseNodeGuid: 4ac96c6b-9080-43d7-a809-1d0591ffdaa0
+    TargetNodeGuid: c423011d-6deb-403f-955c-35f65ab4896b
+  - PortName: Next
+    BaseNodeGuid: c423011d-6deb-403f-955c-35f65ab4896b
+    TargetNodeGuid: b42b1ee7-5967-4794-9cf0-64222027e4f5
+  - PortName: Next
+    BaseNodeGuid: b42b1ee7-5967-4794-9cf0-64222027e4f5
+    TargetNodeGuid: 7b016250-12a5-4c9d-a101-f55e2928d647
+  - PortName: Next
+    BaseNodeGuid: 7b016250-12a5-4c9d-a101-f55e2928d647
+    TargetNodeGuid: ffe14dbd-f480-4942-bbed-dba863e09d3b
+  - PortName: Next
+    BaseNodeGuid: ffe14dbd-f480-4942-bbed-dba863e09d3b
+    TargetNodeGuid: 25fa1549-bdfd-4f23-8ae2-2af5b087d8e1
+  - PortName: Next
+    BaseNodeGuid: 25fa1549-bdfd-4f23-8ae2-2af5b087d8e1
+    TargetNodeGuid: afcdbad0-7872-4075-bdfc-43a427638f5d
+  - PortName: Next
+    BaseNodeGuid: afcdbad0-7872-4075-bdfc-43a427638f5d
+    TargetNodeGuid: 32ea2fea-789f-4e9b-b065-b0e2244a5e31
+  - PortName: Next
+    BaseNodeGuid: 32ea2fea-789f-4e9b-b065-b0e2244a5e31
+    TargetNodeGuid: f6de17e4-6872-4bba-9b40-9454565a0428
+  - PortName: Next
+    BaseNodeGuid: f6de17e4-6872-4bba-9b40-9454565a0428
+    TargetNodeGuid: 5f230829-d163-447a-b71e-738b3593a00a
+  - PortName: Next
+    BaseNodeGuid: 5f230829-d163-447a-b71e-738b3593a00a
+    TargetNodeGuid: cd2a5603-8d39-4a76-825b-1bdbfcfd022e
+  - PortName: Next
+    BaseNodeGuid: cd2a5603-8d39-4a76-825b-1bdbfcfd022e
+    TargetNodeGuid: 2096ecb4-69e9-4f7d-b6a2-7f8b20d62a9a
+  - PortName: Next
+    BaseNodeGuid: 2096ecb4-69e9-4f7d-b6a2-7f8b20d62a9a
+    TargetNodeGuid: 75846dc3-fdfa-486d-ad3e-e388546ebe7b
+  - PortName: Next
+    BaseNodeGuid: 75846dc3-fdfa-486d-ad3e-e388546ebe7b
+    TargetNodeGuid: 615a5fc7-7792-4df3-8795-5cb36b4a4690
+  - PortName: Next
+    BaseNodeGuid: 615a5fc7-7792-4df3-8795-5cb36b4a4690
+    TargetNodeGuid: 6d439f71-9760-4185-a811-ce95bac618db
+  - PortName: Next
+    BaseNodeGuid: 6d439f71-9760-4185-a811-ce95bac618db
+    TargetNodeGuid: 3d9a53d4-0002-4dd8-a132-fcbaabd062f0
+  - PortName: Next
+    BaseNodeGuid: 3d9a53d4-0002-4dd8-a132-fcbaabd062f0
+    TargetNodeGuid: 8829e67f-13ab-45c7-95f6-b1ed9972311f
+  - PortName: Next
+    BaseNodeGuid: 8829e67f-13ab-45c7-95f6-b1ed9972311f
+    TargetNodeGuid: f1811410-f05b-49ca-8f7f-ac7ebde4b0a8
+  - PortName: Next
+    BaseNodeGuid: f1811410-f05b-49ca-8f7f-ac7ebde4b0a8
+    TargetNodeGuid: 05228436-dae1-4ced-8932-3735029750c7
+  - PortName: Next
+    BaseNodeGuid: 05228436-dae1-4ced-8932-3735029750c7
+    TargetNodeGuid: fd8a8b72-425c-445f-a26a-6ab819544d74
+  - PortName: Next
+    BaseNodeGuid: fd8a8b72-425c-445f-a26a-6ab819544d74
+    TargetNodeGuid: 6042043d-606f-4b32-8ec7-1974d79fdbe1
+  - PortName: Next
+    BaseNodeGuid: 6042043d-606f-4b32-8ec7-1974d79fdbe1
+    TargetNodeGuid: f9290557-ebfd-4098-a45a-4d577558ffee
+  - PortName: Next
+    BaseNodeGuid: f9290557-ebfd-4098-a45a-4d577558ffee
+    TargetNodeGuid: 26386e88-984d-48c6-acc5-96a02177aa15
+  - PortName: "\u300C\u2026\u2026\u5206\u304B\u3063\u305F\u3002\u653E\u3063\u3066\u306F\u304A\u3051\u306A\u3044\u3001\u624B\u3092\u8CB8\u305D\u3046\u300D"
+    BaseNodeGuid: 26386e88-984d-48c6-acc5-96a02177aa15
+    TargetNodeGuid: ffe20da6-3cf6-4f99-96ed-cacdfa27e393
+  - PortName: "\u300C\u9762\u767D\u3044\u3002\u79C1\u306E\u300E\u8A18\u61B6\u300F\u3068\u300E\u529B\u300F\u306E\u305F\u3081\u306B\u3001\u304A\u524D\u3092\u5229\u7528\u3057\u3066\u3084\u308B\u300D"
+    BaseNodeGuid: 26386e88-984d-48c6-acc5-96a02177aa15
+    TargetNodeGuid: ced3291b-9717-4ee4-868d-29e0f2567aef
+  - PortName: "\u300C\u9152\u306E\u793C\u3060\u3002\u7F8E\u5473\u3044\u9152\u3092\u8ABF\u9054\u3057\u7D9A\u3051\u308B\u306A\u3089\u3001\u4ED8\u304D\u5408\u3063\u3066\u3084\u308B\u300D"
+    BaseNodeGuid: 26386e88-984d-48c6-acc5-96a02177aa15
+    TargetNodeGuid: 57c98c4d-64dd-451a-b156-bccfbd63faad
+  - PortName: Next
+    BaseNodeGuid: ffe20da6-3cf6-4f99-96ed-cacdfa27e393
+    TargetNodeGuid: 6fc38eb5-d996-4a1c-a265-3d45f855943b
+  - PortName: Next
+    BaseNodeGuid: 6fc38eb5-d996-4a1c-a265-3d45f855943b
+    TargetNodeGuid: cf584a70-3a25-4f46-9b72-4145b1122d17
+  - PortName: Next
+    BaseNodeGuid: cf584a70-3a25-4f46-9b72-4145b1122d17
+    TargetNodeGuid: 0e4cdd51-b7cf-46ad-8751-4b57ef9a2fb7
+  - PortName: Next
+    BaseNodeGuid: 0e4cdd51-b7cf-46ad-8751-4b57ef9a2fb7
+    TargetNodeGuid: 19fb7a1d-c27f-484f-9693-39d36fb84c09
+  - PortName: Next
+    BaseNodeGuid: ced3291b-9717-4ee4-868d-29e0f2567aef
+    TargetNodeGuid: d4d685bf-e92c-4ada-90a4-d15fbdf8591a
+  - PortName: Next
+    BaseNodeGuid: d4d685bf-e92c-4ada-90a4-d15fbdf8591a
+    TargetNodeGuid: d75f19fc-0e75-4094-b6e0-c2c56ecdd1bd
+  - PortName: Next
+    BaseNodeGuid: d75f19fc-0e75-4094-b6e0-c2c56ecdd1bd
+    TargetNodeGuid: 058caf95-12d6-4524-bea6-857a8a85f236
+  - PortName: Next
+    BaseNodeGuid: 058caf95-12d6-4524-bea6-857a8a85f236
+    TargetNodeGuid: 19fb7a1d-c27f-484f-9693-39d36fb84c09
+  - PortName: Next
+    BaseNodeGuid: 57c98c4d-64dd-451a-b156-bccfbd63faad
+    TargetNodeGuid: aa94e470-925e-4c54-b70d-1c8a234138f4
+  - PortName: Next
+    BaseNodeGuid: aa94e470-925e-4c54-b70d-1c8a234138f4
+    TargetNodeGuid: 070b495d-aec3-43ff-8c4a-c49a67342743
+  - PortName: Next
+    BaseNodeGuid: 070b495d-aec3-43ff-8c4a-c49a67342743
+    TargetNodeGuid: 01d9401b-4c63-4246-a0e7-08b2180535d6
+  - PortName: Next
+    BaseNodeGuid: 01d9401b-4c63-4246-a0e7-08b2180535d6
+    TargetNodeGuid: 19fb7a1d-c27f-484f-9693-39d36fb84c09
+  - PortName: Next
+    BaseNodeGuid: 19fb7a1d-c27f-484f-9693-39d36fb84c09
+    TargetNodeGuid: 87b4d01e-507f-46c8-a9fb-f87c33c3b99a
+  - PortName: Next
+    BaseNodeGuid: 87b4d01e-507f-46c8-a9fb-f87c33c3b99a
+    TargetNodeGuid: 29b68a80-026b-49d1-9a34-fbf629a247d0
+  - PortName: Next
+    BaseNodeGuid: 29b68a80-026b-49d1-9a34-fbf629a247d0
+    TargetNodeGuid: 426e5753-6ad1-467c-b432-7807db7d8f23
+  - PortName: Next
+    BaseNodeGuid: 426e5753-6ad1-467c-b432-7807db7d8f23
+    TargetNodeGuid: 30cd1eda-7f1e-4af7-ab28-fb279b01acf6
+  - PortName: Next
+    BaseNodeGuid: 30cd1eda-7f1e-4af7-ab28-fb279b01acf6
+    TargetNodeGuid: 3bc58b69-c2ab-409c-ba58-817fc75694b7
+  - PortName: Next
+    BaseNodeGuid: 3bc58b69-c2ab-409c-ba58-817fc75694b7
+    TargetNodeGuid: 6a44d2f4-ccda-4e69-a215-a690531a64b8
+  - PortName: Next
+    BaseNodeGuid: 6a44d2f4-ccda-4e69-a215-a690531a64b8
+    TargetNodeGuid: 87802012-4e67-4ab1-98ee-dc81b45b2155
+  DialogueNodeData:
+  - DialogueText: "\u9060\u3044\u6614\u3002\u3053\u306E\u5927\u9678\u306F\u300E\u5DE8\u5927\u306A\u5B58\u5728\u300F\u306B\u652F\u914D\u3055\u308C\u3066\u3044\u305F\u3002"
+    NodeGUID: 5c4306c4-f2ca-4fcf-874f-37df1ba146c5
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 0, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 08ded633-fd57-4287-bb42-46c24e16a6d1
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u5F7C\u3089\u306F\u5F37\u5927\u306A\u529B\u3067\u4EBA\u3005\u3092\u5C0E\u304D\u3001\u6642\u306B\u3072\u308C\u4F0F\u305B\u3055\u305B\u305F\u3002"
+    NodeGUID: 2dc3d301-6b34-4479-ad5e-029a14b67704
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 350, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3060\u304C\u3001\u305D\u3093\u306A\u7D76\u5BFE\u7684\u306A\u652F\u914D\u3082\u9577\u304F\u306F\u7D9A\u304B\u306A\u304B\u3063\u305F\u3002"
+    NodeGUID: cb947106-26c2-4cfd-8b43-976e5c984c0f
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 700, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u304D\u3063\u304B\u3051\u306F\u3001\u4FE1\u3058\u3089\u308C\u306A\u3044\u307B\u3069\u304F\u3060\u3089\u306A\u3044\u8ACD\u3044\u3002"
+    NodeGUID: 27b36e05-a363-4ba2-b4bc-2155ea00c7dd
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 1050, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3057\u304B\u3057\u305D\u308C\u306F\u3001\u5927\u9678\u5168\u4F53\u3092\u5DFB\u304D\u8FBC\u3080\u5927\u60E8\u4E8B\u306E\u5F15\u304D\u91D1\u3068\u306A\u3063\u305F\u3002"
+    NodeGUID: 83ead413-3182-40ba-a18f-5b7fc4009d41
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 1400, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u66B4\u308C\u72C2\u3046\u5DE8\u5927\u306A\u5B58\u5728\u305F\u3061\u3002\u305D\u306E\u6226\u3044\u306F\u6570\u4E16\u7D00\u306B\u308F\u305F\u308A\u3001\u5730\u4E0A\u3092\u713C\u304D\u5C3D\u304F\u3057\u305F\u3002"
+    NodeGUID: e5a5ce60-8469-45ae-9954-349d52f9d4b0
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 1750, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u5168\u3066\u306E\u6587\u660E\u304C\u6D88\u3048\u53BB\u308A\u3001\u5F8C\u306B\u6B8B\u3063\u305F\u306E\u306F\u4E0D\u6BDB\u306E\u5927\u5730\u3060\u3051\u3002"
+    NodeGUID: cd774676-91a5-4a34-8664-52f4007a06e6
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 2100, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3059\u3079\u3066\u3092\u6EC5\u307C\u3057\u305F\u5F8C\u3001\u5F7C\u3089\u306F\u6DF1\u3044\u7720\u308A\u306B\u3064\u3044\u305F\u3002"
+    NodeGUID: 0ddf421c-874c-481c-baa8-99b556b28068
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 2450, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u6B21\u306B\u4E16\u754C\u304C\u82BD\u5439\u304D\u3001\u65B0\u305F\u306A\u547D\u304C\u8822\u304F\u305D\u306E\u6642\u307E\u3067\u2500\u2500"
+    NodeGUID: 0dc196de-224f-4757-8a05-d2e9bfc18b5c
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 2800, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: f4fca97f-0579-45e1-9819-e64dee29395c
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u2500\u2500????\u5E74\u5F8C\u3001\u3068\u3042\u308B\u9759\u304B\u306A\u68EE\u306E\u4E2D\u3002"
+    NodeGUID: 573fb7b4-7b55-4e03-a7c0-ce99fb53efb9
+    SpeakerName: 
+    Expression: Normal
+    Position: {x: 3150, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u2026\u2026\u2026\u2026\u3002"
+    NodeGUID: be642c19-ebea-48df-923c-8619aeeac98e
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 3500, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3075\u3042\uFF5E\u3080\u306B\u3083\u3080\u306B\u3083\u2026\u2026\u3002"
+    NodeGUID: 0f8c35e0-b3ec-487c-af46-56b1c91f54fb
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 3850, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u826F\u304F\u5BDD\u305F\u3042\uFF5E\u2026\u2026\u3093\uFF1F"
+    NodeGUID: ed272c48-ea16-4c2d-a202-9746fe8381f4
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 4200, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u2026\u2026\u306A\u3093\u3060\uFF1F\uFF09"
+    NodeGUID: 405222e8-9a71-4993-bbc4-d1bff5ad4343
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 4550, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u76EE\u3092\u899A\u307E\u3057\u305F\u3089\u3001\u76EE\u306E\u524D\u306B\u3084\u305F\u3089\u602A\u3057\u3044\u5973\u304C\u8DEA\u3044\u3066\u3044\u308B\u305E\u2026\u2026\uFF09"
+    NodeGUID: 67485fa6-6eb6-45e6-8719-3b06eceb59a0
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 4900, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u304A\u304A\u2026\u2026\u76EE\u899A\u3081\u3089\u308C\u305F\u306E\u3067\u3059\u306D\u3001\u308F\u304C\u541B\uFF01
+      \u79C1\u306E\u7948\u308A\u304C\u3001\u3064\u3044\u306B\u5C4A\u3044\u305F\u306E\u3067\u3059\u306D\uFF01"
+    NodeGUID: 8c0df1b6-975c-4152-80d3-5576d9cd7825
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 5250, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u308F\u304C\u541B\uFF1F \u3044\u3084\u3001\u8AB0\u306E\u3053\u3068\u3060\uFF1F
+      \u2026\u2026\u72B6\u6CC1\u304C\u3088\u304F\u308F\u304B\u3089\u306A\u3044\u3002"
+    NodeGUID: 987b5479-848d-4fdc-9199-f9c02638b8aa
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 5600, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3042\u306A\u305F\u69D8\u306E\u76EE\u899A\u3081\u306F\u3001\u308F\u304C\u4E00\u65CF\u306E\u60B2\u9858\u306A\u306E\u3067\u3059\u2026\u2026\uFF01
+      \u3042\u3042\u3001\u3064\u3044\u306B\u4F1D\u8AAC\u306E\u4E88\u8A00\u304C\u73FE\u5B9F\u306E\u3082\u306E\u306B\u2026\u2026\uFF01"
+    NodeGUID: 9a311cf7-0a06-4446-a31e-533014b3ec7f
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 5950, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u308F\u304C\u541B\uFF01 \u304A\u9858\u3044\u3067\u3059\uFF01
+      \u3069\u3046\u304B\u3001\u6EC5\u3073\u3086\u304F\u3053\u306E\u56FD\u3092\u2026\u2026\u3053\u306E\u4E16\u754C\u3092\u52A9\u3051\u3066\u304F\u3060\u3055\u3044\uFF01"
+    NodeGUID: 4a6671c7-0563-4956-a3d4-8efc1ed58e9c
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 6300, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3046\u308B\u3055\u3044\u305E\u3002\u76EE\u899A\u3081\u305F\u3070\u304B\u308A\u3067\u982D\u304C\u75DB\u3044\u306E\u3060\u3002
+      \u653E\u3063\u3066\u304A\u3044\u3066\u304F\u308C\u3001\u79C1\u306F\u3082\u3046\u4E00\u5EA6\u5BDD\u308B\u3002"
+    NodeGUID: b8b28301-e985-40e5-8017-c31cf61e5284
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 6650, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3048\u3048\u3063\uFF01\uFF1F \u305D\u3001\u305D\u3093\u306A\u3001\u4E8C\u5EA6\u5BDD\uFF01\uFF1F
+      \u5F85\u3063\u3066\u304F\u3060\u3055\u3044\uFF01 \u79C1\u305F\u3061\u306B\u3082\u79D8\u7B56\u306F\u3042\u308A\u307E\u3059\uFF01"
+    NodeGUID: d0ab3ed2-efb2-411b-b94e-4cae8d4a8e95
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 7000, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u305D\u308C\u3063\uFF01\uFF01\uFF08\u76EE\u306E\u524D\u306B\u9769\u888B\u3092\u5DEE\u3057\u51FA\u3059\uFF09"
+    NodeGUID: ca4cb0e9-a88e-4eb8-a20c-cc8fd0bdf1fb
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 7350, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u2026\u2026\u306A\u3093\u3060\u3001\u3053\u308C\u306F\u3002"
+    NodeGUID: 4ac96c6b-9080-43d7-a809-1d0591ffdaa0
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 7700, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u6211\u304C\u5BB6\u306B\u4EE3\u3005\u4F1D\u308F\u308B\u79D8\u8535\u306E\u9152\u3067\u3059\u3002
+      \u3069\u3046\u3067\u3059\u304B\u2026\u2026\uFF1F \u826F\u3044\u9999\u308A\u304C\u3059\u308B\u3067\u3057\u3087\u3046\uFF1F"
+    NodeGUID: c423011d-6deb-403f-955c-35f65ab4896b
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 8050, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u2026\u2026\u3002 \u3075\u3080\u3001\u5C11\u3057\u8208\u5473\u304C\u51FA\u3066\u304D\u305F\u306A\u3002"
+    NodeGUID: b42b1ee7-5967-4794-9cf0-64222027e4f5
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 8400, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3084\u306F\u308A\uFF01 \u3042\u306A\u305F\u69D8\u304C\u7D76\u5BFE\u306B\u304A\u9152\u597D\u304D\u3060\u3068\u3044\u3046\u3053\u3068\u306F\u3001
+      \u77F3\u7891\u306E\u8A18\u8FF0\u304B\u3089\u30D0\u30C3\u30C1\u30EA\u4E88\u7FD2\u6E08\u307F\u3067\u3057\u305F\uFF01"
+    NodeGUID: 7b016250-12a5-4c9d-a101-f55e2928d647
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 8750, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u3054\u304F\u3001\u3054\u304F\u2026\u2026\uFF09"
+    NodeGUID: ffe14dbd-f480-4942-bbed-dba863e09d3b
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 9100, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u2026\u2026\uFF01\uFF1F \u306A\u3093\u3060\u3053\u308C\u306F\u3002\u305F\u3060\u306E\u9152\u3067\u306F\u306A\u3044\u306A\u3002"
+    NodeGUID: 25fa1549-bdfd-4f23-8ae2-2af5b087d8e1
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 9450, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u5589\u3092\u901A\u3063\u305F\u77AC\u9593\u3001\u4F53\u306B\u7720\u308B\u9B54\u529B\u304C\u30D1\u30C1\u30D1\u30C1\u3068\u5F3E\u3051\u308B\u3088\u3046\u306A\u611F\u899A\u304C\u3042\u308B\u2026\u2026\uFF01\uFF09"
+    NodeGUID: afcdbad0-7872-4075-bdfc-43a427638f5d
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 9800, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3075\u3075\u3093\u3001\u9A5A\u304D\u307E\u3057\u305F\u304B\uFF01
+      \u305D\u308C\u3001\u6211\u304C\u4E00\u65CF\u304C\u4EE3\u3005\u5B88\u3063\u3066\u304D\u305F\u300E\u795E\u6728\u306E\u6D99\u300F\u3068\u3044\u3046\u7279\u5225\u306A\u5FA1\u795E\u9152\u306A\u3093\u3067\u3059\u3002"
+    NodeGUID: 32ea2fea-789f-4e9b-b065-b0e2244a5e31
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 10150, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u5931\u308F\u308C\u305F\u8A18\u61B6\u3084\u529B\u3092\u6D3B\u6027\u5316\u3055\u305B\u308B\u52B9\u80FD\u304C\u3042\u308B\u3001\u306A\u3093\u3066\u53E4\u3044\u8A00\u3044\u4F1D\u3048\u3082\u3042\u3063\u3066\u2026\u2026\u3002"
+    NodeGUID: f6de17e4-6872-4bba-9b40-9454565a0428
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 10500, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u78BA\u304B\u306B\u3001\u982D\u306E\u9727\u304C\u307B\u3093\u306E\u5C11\u3057\u6674\u308C\u305F\u6C17\u304C\u3059\u308B\uFF09"
+    NodeGUID: 5f230829-d163-447a-b71e-738b3593a00a
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 10850, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u79C1\u306E\u5931\u308F\u308C\u305F\u8A18\u61B6\u3084\u672C\u6765\u306E\u529B\u3092\u53D6\u308A\u623B\u3059\u306B\u306F\u3001\u3053\u306E\u4E16\u754C\u306E\u7279\u6B8A\u306A\u9152\u3084\u3001\u5404\u5730\u306E\u907A\u8DE1\u306B\u7720\u308B\u79D8\u5B9D\u304C\u5FC5\u8981\u306A\u306E\u304B\u2026\u2026\uFF1F\uFF09"
+    NodeGUID: cd2a5603-8d39-4a76-825b-1bdbfcfd022e
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 11200, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u30B0\u30A4\u30C3\u3068\u81EA\u5206\u3082\u30E9\u30C3\u30D1\u98F2\u307F\u3057\u3066\u3001\u4E00\u77AC\u3067\u9854\u3092\u771F\u3063\u8D64\u306B\u3059\u308B\uFF09"
+    NodeGUID: 2096ecb4-69e9-4f7d-b6a2-7f8b20d62a9a
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 11550, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3046\u3046\u3046\u2026\u2026\u3067\u3082\u3049\uFF01 \u5B9F\u306F\u3001\u3053\u306E\u304A\u9152\u3082\u3053\u308C\u3067\u6700\u5F8C\u306A\u3093\u3067\u3059\u3045\u2026\u2026\u3002"
+    NodeGUID: 75846dc3-fdfa-486d-ad3e-e388546ebe7b
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 11900, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u304A\u3044\u3001\u6025\u306B\u6CE3\u304D\u51FA\u3059\u306A\u3002\u9152\u304C\u307E\u305A\u304F\u306A\u308B\u3002"
+    NodeGUID: 615a5fc7-7792-4df3-8795-5cb36b4a4690
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 12250, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3060\u3063\u3066\u3047\uFF01 \u6751\u306F\u4ED6\u56FD\u306E\u7565\u596A\u3067\u3081\u3061\u3083\u304F\u3061\u3083\u3001\u53CB\u9054\u3082\u307F\u3093\u306A\u30D0\u30E9\u30D0\u30E9\u306B\u9003\u3052\u3066\u2026\u2026\u3002
+      \u79C1\u3001\u3053\u306E\u304A\u9152\u3060\u3051\u3092\u6301\u3063\u3066\u3001\u5FC5\u6B7B\u3067\u3053\u3053\u306B\u9003\u3052\u3066\u304D\u305F\u3093\u3067\u3059\u3088\uFF01\uFF1F"
+    NodeGUID: 6d439f71-9760-4185-a811-ce95bac618db
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 12600, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u6BCE\u65E5\u6BCE\u65E5\u3001\u3053\u306E\u8584\u6697\u3044\u68EE\u3067\u866B\u306B\u523A\u3055\u308C\u306A\u304C\u3089\u3001\u3042\u306A\u305F\u69D8\u304C\u8D77\u304D\u308B\u306E\u3092\u7948\u3063\u3066\u305F\u306E\u306B\u2026\u2026\u3002"
+    NodeGUID: 3d9a53d4-0002-4dd8-a132-fcbaabd062f0
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 12950, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u300C\u3082\u3046\u5BDD\u308B\u300D\u3060\u306A\u3093\u3066\u2026\u2026\u3046\u3045\u3001\u3072\u3069\u3044\u3067\u3059\u3045\u2026\u2026\uFF08\u30B0\u30B9\u30C3\uFF09"
+    NodeGUID: 8829e67f-13ab-45c7-95f6-b1ed9972311f
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 13300, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u304A\u524D\u3001\u304A\u9152\u304C\u5F31\u3059\u304E\u308B\u3060\u308D\u3046\u2026\u2026\u3002\u5B8C\u5168\u306B\u9154\u3063\u6255\u3063\u3066\u3044\u308B\u306A\uFF09"
+    NodeGUID: f1811410-f05b-49ca-8f7f-ac7ebde4b0a8
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 13650, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u30D2\u30C3\u30AF\u2026\u2026\u3082\u3057\u3042\u306A\u305F\u69D8\u304C\u52A9\u3051\u3066\u304F\u308C\u306A\u3044\u306A\u3089\u3001\u79C1\u3001\u68EE\u3092\u51FA\u305F\u77AC\u9593\u306B\u304A\u3057\u307E\u3044\u3067\u3059\u2026\u2026\u3002"
+    NodeGUID: 05228436-dae1-4ced-8932-3735029750c7
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 14000, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u304A\u9152\u306E\u5302\u3044\u306B\u91E3\u3089\u308C\u305F\u7363\u306B\u8972\u308F\u308C\u308B\u304B\u3001\u4ED6\u56FD\u306E\u5175\u58EB\u306B\u6355\u307E\u3063\u3066\u2026\u2026\uFF08\u3050\u3059\u3093\uFF09"
+    NodeGUID: fd8a8b72-425c-445f-a26a-6ab819544d74
+    SpeakerName: "\u602A\u3057\u3044\u5973"
+    Expression: Normal
+    Position: {x: 14350, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u3084\u308C\u3084\u308C\u2026\u2026\u3002\u3053\u306E\u5C0B\u5E38\u3067\u306F\u306A\u3044\u4E0D\u5668\u7528\u3055\u3068\u3001\u6EA2\u308C\u51FA\u308B\u4E0D\u904B\u306E\u30AA\u30FC\u30E9\uFF09"
+    NodeGUID: 6042043d-606f-4b32-8ec7-1974d79fdbe1
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 14700, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u653E\u3063\u3066\u304A\u3051\u3070\u3001\u3053\u306E\u54C0\u308C\u306A\u5973\u306F\u68EE\u3092\u51FA\u3066\u6570\u6B69\u3067\u672C\u5F53\u306B\u91CE\u5782\u308C\u6B7B\u306C\u306A\u2026\u2026\u3002\u898B\u3066\u3044\u3089\u308C\u3093\uFF09"
+    NodeGUID: f9290557-ebfd-4098-a45a-4d577558ffee
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 15050, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u3060\u304C\u3001\u3053\u306E\u5FC5\u6B7B\u3055\u3068\u3001\u304A\u524D\u306E\u4E00\u65CF\u306B\u4F1D\u308F\u308B\u304A\u9152\u306E\u4FA1\u5024\u306F\u672C\u7269\u3060\u3002\u2026\u2026\u304A\u524D\u306F\u3069\u3046\u3059\u308B\uFF1F\uFF09"
+    NodeGUID: 26386e88-984d-48c6-acc5-96a02177aa15
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 15400, y: 0}
+    Choices:
+    - "\u300C\u2026\u2026\u5206\u304B\u3063\u305F\u3002\u653E\u3063\u3066\u306F\u304A\u3051\u306A\u3044\u3001\u624B\u3092\u8CB8\u305D\u3046\u300D"
+    - "\u300C\u9762\u767D\u3044\u3002\u79C1\u306E\u300E\u8A18\u61B6\u300F\u3068\u300E\u529B\u300F\u306E\u305F\u3081\u306B\u3001\u304A\u524D\u3092\u5229\u7528\u3057\u3066\u3084\u308B\u300D"
+    - "\u300C\u9152\u306E\u793C\u3060\u3002\u7F8E\u5473\u3044\u9152\u3092\u8ABF\u9054\u3057\u7D9A\u3051\u308B\u306A\u3089\u3001\u4ED8\u304D\u5408\u3063\u3066\u3084\u308B\u300D"
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u2026\u2026\u5206\u304B\u3063\u305F\u3002\u653E\u3063\u3066\u306F\u304A\u3051\u306A\u3044\u3001\u624B\u3092\u8CB8\u305D\u3046\u3002\u3053\u308C\u3067\u3082\u4E00\u5FDC\u3001\u304A\u524D\u306E\u4E00\u65CF\u306E\u300C\u308F\u304C\u541B\u300D\u3089\u3057\u3044\u304B\u3089\u306A\u3002"
+    NodeGUID: ffe20da6-3cf6-4f99-96ed-cacdfa27e393
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 15750, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3046\u3001\u3046\u308F\u3041\u3041\u3093\uFF01 \u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u2026\u2026\uFF01
+      \u3084\u3063\u3071\u308A\u3001\u4E88\u8A00\u306E\u795E\u69D8\u306F\u5618\u3092\u3064\u304B\u306A\u304B\u3063\u305F\u3093\u3060\u2026\u2026\uFF01"
+    NodeGUID: 6fc38eb5-d996-4a1c-a265-3d45f855943b
+    SpeakerName: "\u6751\u5A18"
+    Expression: Normal
+    Position: {x: 16100, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u2026\u2026\u6CE3\u304D\u3059\u304E\u3066\u9854\u304C\u3050\u3061\u3083\u3050\u3061\u3083\u3060\u306A\u3002\u307E\u3042\u3001\u3053\u306E\u5FC5\u6B7B\u306A\u9854\u306F\u5ACC\u3044\u3058\u3083\u306A\u3044\uFF09"
+    NodeGUID: cf584a70-3a25-4f46-9b72-4145b1122d17
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 16450, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u3053\u3044\u3064\u3092\u6848\u5185\u4EBA\u306B\u4ED5\u7ACB\u3066\u3066\u3001\u79C1\u306E\u5931\u308F\u308C\u305F\u8A18\u61B6\u3068\u529B\u3092\u53D6\u308A\u623B\u3059\u305F\u3081\u306E\u65C5\u306B\u51FA\u308B\u3068\u3059\u308B\u304B\uFF09"
+    NodeGUID: 0e4cdd51-b7cf-46ad-8751-4b57ef9a2fb7
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 16800, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u9762\u767D\u3044\u3002\u79C1\u306E\u5931\u308F\u308C\u305F\u8A18\u61B6\u3068\u529B\u3092\u53D6\u308A\u623B\u3059\u305F\u3081\u306B\u3001\u304A\u524D\u306E\u305D\u306E\u300E\u5FC5\u6B7B\u3055\u300F\u3068\u300E\u9152\u300F\u3001\u5229\u7528\u3055\u305B\u3066\u3082\u3089\u3046\u305E\u3002"
+    NodeGUID: ced3291b-9717-4ee4-868d-29e0f2567aef
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 17150, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u30D2\u30C3\u30AF\u2026\u2026\u5229\u3001\u5229\u7528\uFF1F \u3048\u3001\u3048\u3048\u3001\u4F55\u3067\u3082\u4F7F\u3063\u3066\u304F\u3060\u3055\u3044\uFF01
+      \u79C1\u3001\u96D1\u7528\u3067\u3082\u76FE\u3067\u3082\u4F55\u3067\u3082\u3084\u308A\u307E\u3059\u304B\u3089\uFF01"
+    NodeGUID: d4d685bf-e92c-4ada-90a4-d15fbdf8591a
+    SpeakerName: "\u6751\u5A18"
+    Expression: Normal
+    Position: {x: 17500, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u3075\u3001\u9762\u767D\u3044\u5973\u3060\u3002\u3053\u308C\u3060\u3051\u306E\u57F7\u5FF5\u3068\u899A\u609F\u304C\u3042\u308B\u306A\u3089\u3001\u88CF\u5207\u308B\u5FC3\u914D\u3082\u306A\u3044\u3060\u308D\u3046\uFF09"
+    NodeGUID: d75f19fc-0e75-4094-b6e0-c2c56ecdd1bd
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 17850, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u79C1\u81EA\u8EAB\u306E\u52E2\u529B\u3092\u7BC9\u304D\u3001\u3053\u306E\u4E71\u4E16\u3067\u8987\u3092\u5531\u3048\u308B\u3002\u305D\u308C\u3053\u305D\u304C\u79C1\u306E\u8A18\u61B6\u3092\u63B4\u307F\u53D6\u308B\u6700\u77ED\u30EB\u30FC\u30C8\u3060\uFF09"
+    NodeGUID: 058caf95-12d6-4524-bea6-857a8a85f236
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 18200, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3053\u308C\u3082\u4F55\u304B\u306E\u7E01\u3001\u305D\u3057\u3066\u7F8E\u5473\u3044\u9152\u3092\u98F2\u307E\u305B\u3066\u3082\u3089\u3063\u305F\u793C\u3060\u3002
+      \u305F\u3060\u3057\u3001\u4ECA\u5F8C\u3082\u79C1\u306E\u305F\u3081\u306B\u6975\u4E0A\u306E\u9152\u3092\u8ABF\u9054\u3057\u7D9A\u3051\u308B\u3053\u3068\u304C\u6761\u4EF6\u3060\u305E\uFF1F"
+    NodeGUID: 57c98c4d-64dd-451a-b156-bccfbd63faad
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 18550, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u304A\u9152\u3067\u3059\u304B\uFF01\uFF1F \u306F\u3001\u306F\u3044\u3043\uFF01
+      \u3053\u306E\u5927\u9678\u4E2D\u3092\u99C6\u3051\u5DE1\u3063\u3066\u3001\u3069\u3093\u306A\u540D\u9152\u3067\u3082\u898B\u3064\u3051\u3066\u307F\u305B\u307E\u3059\uFF01"
+    NodeGUID: aa94e470-925e-4c54-b70d-1c8a234138f4
+    SpeakerName: "\u6751\u5A18"
+    Expression: Normal
+    Position: {x: 18900, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u3088\u3057\u3002\u653E\u3063\u3066\u304A\u3051\u3070\u79D2\u3067\u6B7B\u306B\u305D\u3046\u306A\u3053\u306E\u6751\u5A18\u306E\u4FDD\u8B77\u3082\u517C\u306D\u3066\u3001\u304A\u3068\u306A\u3057\u304F\u6848\u5185\u4EBA\u306B\u4ED5\u7ACB\u3066\u3066\u3084\u308B\u304B\uFF09"
+    NodeGUID: 070b495d-aec3-43ff-8c4a-c49a67342743
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 19250, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\uFF08\u4E16\u754C\u306E\u7F8E\u5473\u3044\u9152\u3068\u79D8\u5B9D\u3092\u96C6\u3081\u308C\u3070\u3001\u3044\u3064\u304B\u79C1\u306E\u8A18\u61B6\u3082\u5B8C\u5168\u306B\u623B\u308B\u306F\u305A\u3060\uFF09"
+    NodeGUID: 01d9401b-4c63-4246-a0e7-08b2180535d6
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 19600, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u304A\u3044\u3001\u8D77\u304D\u308D\u3002 \u6CE3\u3044\u305F\u308A\u9154\u3044\u6F70\u308C\u305F\u308A\u3057\u3066\u3044\u308B\u5834\u5408\u3067\u306F\u306A\u3044\u305E\u3002"
+    NodeGUID: 19fb7a1d-c27f-484f-9693-39d36fb84c09
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 19950, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u306F\u3045\u3045\u2026\u2026\u304A\u3001\u304A\u547C\u3073\u3067\u3057\u3087\u3046\u304B\u3001\u308F\u304C\u541B\u2026\u2026\uFF1F\uFF08\u614C\u3066\u3066\u59FF\u52E2\u3092\u6B63\u3059\uFF09"
+    NodeGUID: 87b4d01e-507f-46c8-a9fb-f87c33c3b99a
+    SpeakerName: "\u6751\u5A18"
+    Expression: Normal
+    Position: {x: 20300, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u304A\u524D\u3092\u6211\u304C\u300E\u88DC\u4F50\u5B98\u300F\u306B\u4EFB\u547D\u3059\u308B\u3002"
+    NodeGUID: 29b68a80-026b-49d1-9a34-fbf629a247d0
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 20650, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u307E\u305A\u306F\u3053\u306E\u5927\u9678\u306E\u72B6\u6CC1\u3068\u3001\u4ED6\u306E\u56FD\u3005\u306E\u52D5\u5411\u3092\u6559\u3048\u308D\u3002
+      \u79C1\u305F\u3061\u306E\u8987\u9053\u3092\u9032\u3080\u305F\u3081\u306B\u3002"
+    NodeGUID: 426e5753-6ad1-467c-b432-7807db7d8f23
+    SpeakerName: "\u3042\u306A\u305F"
+    Expression: Normal
+    Position: {x: 21000, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u3042\u3001\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u2026\u2026\u3063\uFF01"
+    NodeGUID: 30cd1eda-7f1e-4af7-ab28-fb279b01acf6
+    SpeakerName: "\u6751\u5A18"
+    Expression: Normal
+    Position: {x: 21350, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u306F\u3044\uFF01 \u73FE\u5728\u3001\u3053\u306E\u5927\u9678\u306F\u7FA4\u96C4\u5272\u62E0\u306E\u9663\u53D6\u308A\u5408\u6226\u306E\u771F\u3063\u53EA\u4E2D\u2026\u2026\u3002"
+    NodeGUID: 3bc58b69-c2ab-409c-ba58-817fc75694b7
+    SpeakerName: "\u6751\u5A18"
+    Expression: Normal
+    Position: {x: 21700, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  - DialogueText: "\u56FD\u3092\u904B\u55B6\u3057\u3064\u3064\u3001\u5468\u8FBA\u56FD\u3068\u95A2\u4FC2\u3092\u7BC9\u304D\u3001\u5927\u9678\u7D71\u4E00\u3092\u76EE\u6307\u3057\u307E\u3057\u3087\u3046\uFF01"
+    NodeGUID: 6a44d2f4-ccda-4e69-a215-a690531a64b8
+    SpeakerName: "\u6751\u5A18"
+    Expression: Normal
+    Position: {x: 22050, y: 0}
+    Choices: []
+    PortraitNodeGUID: 
+    StillNodeGUID: 
+    ShowSettings: 0
+    OverrideTypingSpeed: 0
+    TypingSpeedValue: 0
+    TypingSpeedNodeGUID: 
+    CanSkipTyping: 1
+  CharacterNodeData: []
+  PortraitNodeData: []
+  StillNodeData:
+  - StillImage: {fileID: 21300000, guid: 505bb2b725051ba45b1d3c2310253d9b, type: 3}
+    NodeGUID: 08ded633-fd57-4287-bb42-46c24e16a6d1
+    ShouldScrollStill: 1
+    ScrollAmount: 0
+    ScrollSpeed: 0
+    Position: {x: -250, y: 150}
+  - StillImage: {fileID: 21300000, guid: 396af0dc36c2cd744b8c19d456b26dfa, type: 3}
+    NodeGUID: f4fca97f-0579-45e1-9819-e64dee29395c
+    ShouldScrollStill: 0
+    ScrollAmount: 0
+    ScrollSpeed: 0
+    Position: {x: 2550, y: 150}
+  PanelSizeNodeData:
+  - PanelWidth: 230
+    NodeGUID: 98cb451e-a72e-416e-b267-5684482e82e3
+    Position: {x: -300, y: -350}
+  StartNodeData: []
+  EndNodeData:
+  - NodeGUID: 87802012-4e67-4ab1-98ee-dc81b45b2155
+    Position: {x: 1000, y: 0}
+  ExposedProperties: []
+  PropertyNodeData: []

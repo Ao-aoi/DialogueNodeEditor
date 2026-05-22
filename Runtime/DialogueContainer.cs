@@ -12,7 +12,7 @@ namespace DialogueNodeEditor
         public List<CharacterNodeData> CharacterNodeData = new List<CharacterNodeData>();
         public List<PortraitNodeData> PortraitNodeData = new List<PortraitNodeData>();
         public List<StillNodeData> StillNodeData = new List<StillNodeData>();
-        public List<PanelSizeNodeData> PanelSizeNodeData = new List<PanelSizeNodeData>();
+        public List<PanelSettingNodeData> PanelSizeNodeData = new List<PanelSettingNodeData>();
         public List<StartNodeData> StartNodeData = new List<StartNodeData>();
         public List<EndNodeData> EndNodeData = new List<EndNodeData>();
 

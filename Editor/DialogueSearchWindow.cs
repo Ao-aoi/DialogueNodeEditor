@@ -35,7 +35,7 @@ namespace DialogueNodeEditor
                 new SearchTreeGroupEntry(new GUIContent("Settings"), 1),
                 new SearchTreeEntry(new GUIContent("Portrait Setting")) { userData = new PortraitNode(), level = 2 },
                 new SearchTreeEntry(new GUIContent("Still Setting")) { userData = new StillNode(), level = 2 },
-                new SearchTreeEntry(new GUIContent("Panel Size Setting")) { userData = new PanelSizeNode(), level = 2 },
+                new SearchTreeEntry(new GUIContent("Panel Setting")) { userData = new PanelSettingNode(), level = 2 },
                 
                 new SearchTreeGroupEntry(new GUIContent("Properties"), 1)
             };
